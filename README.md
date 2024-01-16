@@ -26,7 +26,8 @@ This pertains to SSC cohort.
 |    col 2 is    |          M-M          |        quad |
 | zebra stripes  |           F           |        trio |
 
-Separately, there are three SAGE trios: BK143, BK196, BK486  
+Separately, there are three SAGE trios: BK143, BK196, BK486.
+Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/nobackups/sample_info.tab`
 
 [:arrow_double_up:](#table-of-contents)
 ## QC
