@@ -9,6 +9,7 @@ A place to log tasks involved for this project- either executed sequentially or 
 * [Variant calling](#variant-calling)
 * [Getting a refined call set](#refined-callset)
 * [Methylation](#methylation)
+* [FAQ](#faq)
 
 ## Inputs
 ### Sample origin/cohort
@@ -55,5 +56,14 @@ This step produces a methylation bed file and
   * [pb-CpG-tools](https://github.com/PacificBiosciences/pb-CpG-tools)
 * ONT data
   * [modkit](https://github.com/nanoporetech/modkit)
+
+[:arrow_double_up:](#table-of-contents)
+
+## FAQ
+1. I think the sample is contaminated, how should I investigate?
+   1. Try verifybamid either for each cell *or* for the entire sample aligned against the same reference as its Illumina bam.
+   2. Try back-reference-qc to see how much non-human contamination there is and remove it from the fastq.gz
+2. I think the sample is of different sex, what to do?
+   1. Estimate the sex using [this script](https://github.com/projectoriented/bio-utils/blob/main/sex-estimator.py) either for each cell or the entire sample. The input must be a BAM.
 
 [:arrow_double_up:](#table-of-contents)
