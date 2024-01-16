@@ -39,9 +39,6 @@ ln -s /net/eichler/vol28/software/pipelines/svpop/svpop-3.4.0/runlocal
         "szro-50-200": "nr::szro(0.5,200,4)",
         "szro-80": "nr::szro(0.8,,4):match(0.8)",
         "sv-exact": "nr::exact"
-    },
-    "filter": {
-        "no_filt": "/net/eichler/vol26/projects/primate_sv/nobackups/analysis/ponAbe3_rerun/svpop/no_filt.bed"
     }
 }
 ```
