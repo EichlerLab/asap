@@ -7,6 +7,7 @@ A place to log tasks involved for this project- either executed sequentially or 
 * [Genome Assembly](#genome-assembly)
 * [Alignment](#alignment)
 * [Variant calling](#variant-calling)
+* [Getting a refined call set](#refined-callset)
 * [Methylation](#methylation)
 
 ## Inputs
@@ -26,7 +27,7 @@ A place to log tasks involved for this project- either executed sequentially or 
 This step produces a fasta file.
 * hifiasm: use this pipeline/tool to assemble sample genome
   * **trio-phased requires** parental Illumina data as input
-* Version used for all our samples ATM: hifiasm 0.16.1 with just HiFi data.
+* Version used for all our samples ATM (Jan 16, 2024): hifiasm 0.16.1 with just HiFi data.
 
 [:arrow_double_up:](#table-of-contents)
 ## Alignment
@@ -35,11 +36,21 @@ This step is produces a BAM.
   * pbmm2
 
 [:arrow_double_up:](#table-of-contents)
+
 ## Variant calling
 * pbsv: use this with pbmm2 output
 
 [:arrow_double_up:](#table-of-contents)
+
+## Refined callset
+### SVPOP sampleset merging of SVs
+### Discovery curve
+### DNM validation
+
+[:arrow_double_up:](#table-of-contents)
+
 ## Methylation
+This step produces a methylation bed file and
 * HiFi data
   * [pb-CpG-tools](https://github.com/PacificBiosciences/pb-CpG-tools)
 * ONT data
