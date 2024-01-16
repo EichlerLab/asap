@@ -59,8 +59,9 @@ This step is produces a BAM. And can be achieved via: https://eichlerlab.gs.wash
 [:arrow_double_up:](#table-of-contents)
 
 ## Variant calling
-* [pbsv](https://github.com/PacificBiosciences/pbsv): use this with pbmm2 output
-* [PAV](https://github.com/EichlerLab/pav): input for this 
+* [pbsv](https://github.com/PacificBiosciences/pbsv): use pbmm2 output as input for this
+* [PAV](https://github.com/EichlerLab/pav): use hifiasm assembly output for this
+  * [instructions](notes/pav.md)
 
 [:arrow_double_up:](#table-of-contents)
 
@@ -75,7 +76,7 @@ The steps here are by sequential order.
 [:arrow_double_up:](#table-of-contents)
 
 ## Methylation
-This step produces a methylation bed file and bigwig files of the beds.
+This step produces a methylation bed file and bigwig files of the beds. The pipeline for both technologies are here: https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:methylation
 * HiFi data
   * [pb-CpG-tools](https://github.com/PacificBiosciences/pb-CpG-tools)
 * ONT data
@@ -85,7 +86,9 @@ This step produces a methylation bed file and bigwig files of the beds.
 
 ## Analyses
 #### Contiguous chromosome X
+
 #### DNM visualization
+https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:ava_svbyeye
 #### DMR identification
 
 ## FAQ
