@@ -15,6 +15,15 @@ This repo logs tasks involved for this project- either executed sequentially or 
 
 ## Inputs
 ### Sample origin/cohort
+This pertains to SSC cohort.
+
+|     Count      | Sex (proband-sibling) | Family type |
+|:--------------:|:---------------------:|------------:|
+|    col 3 is    |          F-F          |        quad |
+|    col 2 is    |          F-M          |        quad |
+|    col 2 is    |          M-M          |        quad |
+| zebra stripes  |           F           |        trio |
+
 
 [:arrow_double_up:](#table-of-contents)
 ## QC
@@ -53,7 +62,7 @@ This step is produces a BAM.
 [:arrow_double_up:](#table-of-contents)
 
 ## Methylation
-This step produces a methylation bed file and
+This step produces a methylation bed file and bigwig files of the beds.
 * HiFi data
   * [pb-CpG-tools](https://github.com/PacificBiosciences/pb-CpG-tools)
 * ONT data
