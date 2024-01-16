@@ -20,12 +20,15 @@ This repo logs tasks involved for this project- either executed sequentially or 
 ### Sample origin/cohort
 This pertains to SSC cohort.
 
-|     Count      | Sex (proband-sibling) | Family type |
-|:--------------:|:---------------------:|------------:|
-|    col 3 is    |          F-F          |        quad |
-|    col 2 is    |          F-M          |        quad |
-|    col 2 is    |          M-M          |        quad |
-| zebra stripes  |           F           |        trio |
+| Count | Sex (proband-sibling) | Family type |
+|:-----:|:---------------------:|------------:|
+|  11   |          F-F          |        quad |
+|  17   |          F-M          |        quad |
+|   4   |          M-F          |        quad |
+|   5   |          M-M          |        quad |
+|  10   |           F           |        trio |
+|   2   |           M           |        trio |
+|   1   |         F-F-F         |       penta |
 
 Separately, there are three SAGE trios: BK143, BK196, BK486.
 Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/nobackups/sample_info.tab`
@@ -48,14 +51,16 @@ This step produces a fasta file.
 
 [:arrow_double_up:](#table-of-contents)
 ## Alignment
-This step is produces a BAM.
+This step is produces a BAM. And can be achieved via: https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:wharvey:align_all
 * HiFi fastq.gz input
-  * pbmm2
+  * [pbmm2](https://github.com/PacificBiosciences/pbmm2)
+* Illumina fastq.gz input
 
 [:arrow_double_up:](#table-of-contents)
 
 ## Variant calling
-* pbsv: use this with pbmm2 output
+* [pbsv](https://github.com/PacificBiosciences/pbsv): use this with pbmm2 output
+* [PAV](https://github.com/EichlerLab/pav): input for this 
 
 [:arrow_double_up:](#table-of-contents)
 
@@ -96,10 +101,25 @@ This step produces a methylation bed file and bigwig files of the beds.
 ## Paths
 ```shell
 LRA=/net/eichler/vol28/projects/long_read_archive/nobackups
+sample=14455_p1
+
+# File of File Names (fofn)
+# hifi
+ls -lrtha $LRA/clinical/${sample}/raw_data/PacBio_HiFi/fofn/ccs/fastq.fofn
+# ont
+PATH="/net/eichler/vol28/software/pipelines/compteam_tools:$PATH"
+make_ont_fofn.py --sample ${sample} \
+  --proj_dir $LRA/clinical \
+  --output ${sample}.fofn \
+  --filter_string 'lib=STD;model=sup.*;bc=guppy;ver=6;ftype=bam'
 
 # hifiasm assemblies
-sample=14455_p1; ls -lrtha $LRA/clinical/${sample}/assemblies/hifiasm
+ls -lrtha $LRA/clinical/${sample}/assemblies/hifiasm
 ```
+
+https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:make_ont_fofn
+
+[:arrow_double_up:](#table-of-contents)
 
 ## Housekeeping
 1. SFARI data deposition
