@@ -70,6 +70,7 @@ The steps here are by sequential order.
 
 #### SUBSEQ for SV validation
 #### SVPOP sampleset merging of SVs
+* [SVPOP](https://github.com/EichlerLab/svpop): [instructions here](notes/svpop.md)
 #### Discovery curve
 #### DNM validation
 
