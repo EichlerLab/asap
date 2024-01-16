@@ -13,6 +13,7 @@ This repo logs tasks involved for this project- either executed sequentially or 
 * [Methylation](#methylation)
 * [Analyses](#analyses)
 * [FAQ](#faq)
+* [Paths](#paths)
 * [Housekeeping](#housekeeping)
 
 ## Inputs
@@ -59,6 +60,9 @@ This step is produces a BAM.
 [:arrow_double_up:](#table-of-contents)
 
 ## Refined callset
+The steps here are by sequential order.
+
+#### SUBSEQ for SV validation
 #### SVPOP sampleset merging of SVs
 #### Discovery curve
 #### DNM validation
@@ -89,6 +93,16 @@ This step produces a methylation bed file and bigwig files of the beds.
 
 [:arrow_double_up:](#table-of-contents)
 
+## Paths
+```shell
+LRA=/net/eichler/vol28/projects/long_read_archive/nobackups
+
+# hifiasm assemblies
+sample=14455_p1; ls -lrtha $LRA/clinical/${sample}/assemblies/hifiasm
+```
+
 ## Housekeeping
 1. SFARI data deposition
 2. Scripts that routinely updates the google sheets.
+
+[:arrow_double_up:](#table-of-contents)
