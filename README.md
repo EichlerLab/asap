@@ -37,10 +37,13 @@ Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/noback
 ## QC
 #### Fastq.gz input only
 * back-reference-qc: use this pipeline for non-human contamination of reads.
+  * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:back_reference_qc
 #### Fasta.gz + its own Illumina input
 * merqury: use this tool/pipeline to assess quality of genome assembly
+  * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:merqury
 #### Bam input
 * verifybamid: use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
+  * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:nidhi12k:vbi
 
 [:arrow_double_up:](#table-of-contents)
 ## Genome Assembly
@@ -87,10 +90,14 @@ This step produces a methylation bed file and bigwig files of the beds. The pipe
 
 ## Analyses
 #### Contiguous chromosome X
+* https://github.com/projectoriented/contiguous-X
 
 #### DNM visualization
-https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:ava_svbyeye
+* https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:ava_svbyeye
+
 #### DMR identification
+Group-comparison pipeline, will add on population-wise later this month
+* https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:dss_snakemake
 
 ## FAQ
 1. I think the sample is contaminated, how should I investigate?
