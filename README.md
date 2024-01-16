@@ -12,7 +12,8 @@ A place to log tasks involved for this project- either executed sequentially or 
 ## Inputs
 ### Sample origin/cohort
 
-<div align="right"> [:arrow_double_up:](#table-of-contents) </div>
+<div style="text-align: right"> [:arrow_double_up:](#table-of-contents) </div>
+
 ## QC
 ### Fastq.gz input only
 * back-reference-qc: use this pipeline for non-human contamination of reads.
@@ -21,28 +22,28 @@ A place to log tasks involved for this project- either executed sequentially or 
 ### Bam input
 * verifybamid: use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
 
-[:arrow_double_up:](#table-of-contents)
+<div style="text-align: right"> [:arrow_double_up:](#table-of-contents) </div>
 ## Genome Assembly
 This step produces a fasta file.
 * hifiasm: use this pipeline/tool to assemble sample genome
   * **trio-phased requires** parental Illumina data as input
 * Version used for all our samples ATM: hifiasm 0.16.1 with just HiFi data.
 
-[:arrow_double_up:](#table-of-contents)
+<div style="text-align: right"> [:arrow_double_up:](#table-of-contents) </div>
 ## Alignment
 This step is produces a BAM.
 * HiFi fastq.gz input
   * pbmm2
 
-[:arrow_double_up:](#table-of-contents)
+<div style="text-align: right"> [:arrow_double_up:](#table-of-contents) </div>
 ## Variant calling
 * pbsv: use this with pbmm2 output
 
-[:arrow_double_up:](#table-of-contents)
+<div style="text-align: right"> [:arrow_double_up:](#table-of-contents) </div>
 ## Methylation
 * HiFi data
   * [pb-CpG-tools](https://github.com/PacificBiosciences/pb-CpG-tools)
 * ONT data
   * [modkit](https://github.com/nanoporetech/modkit)
 
-[:arrow_double_up:](#table-of-contents)
+<div style="text-align: right"> [:arrow_double_up:](#table-of-contents) </div>
