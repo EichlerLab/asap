@@ -11,6 +11,7 @@ A place to log tasks involved for this project- either executed sequentially or 
 
 ## Inputs
 ### Sample origin/cohort
+
 [back to top](#table-of-contents)
 ## QC
 ### Fastq.gz input only
@@ -19,17 +20,20 @@ A place to log tasks involved for this project- either executed sequentially or 
 * merqury: use this tool/pipeline to assess quality of genome assembly
 ### Bam input
 * verifybamid: use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
+
 [back to top](#table-of-contents)
 ## Genome Assembly
 This step produces a fasta file.
 * hifiasm: use this pipeline/tool to assemble sample genome
   * **trio-phased requires** parental Illumina data as input
 * Version used for all our samples ATM: hifiasm 0.16.1 with just HiFi data.
+
 [back to top](#table-of-contents)
 ## Alignment
 This step is produces a BAM.
 * HiFi fastq.gz input
   * pbmm2
+
 [back to top](#table-of-contents)
 ## Variant calling
 * pbsv: use this with pbmm2 output
@@ -39,4 +43,5 @@ This step is produces a BAM.
   * [pb-CpG-tools](https://github.com/PacificBiosciences/pb-CpG-tools)
 * ONT data
   * [modkit](https://github.com/nanoporetech/modkit)
+
 [back to top](#table-of-contents)
