@@ -11,7 +11,9 @@ This repo logs tasks involved for this project- either executed sequentially or 
 * [Variant calling](#variant-calling)
 * [Getting a refined call set](#refined-callset)
 * [Methylation](#methylation)
+* [Analyses](#analyses)
 * [FAQ](#faq)
+* [Housekeeping](#housekeeping)
 
 ## Inputs
 ### Sample origin/cohort
@@ -24,14 +26,15 @@ This pertains to SSC cohort.
 |    col 2 is    |          M-M          |        quad |
 | zebra stripes  |           F           |        trio |
 
+Separately, there are three SAGE trios: BK143, BK196, BK486  
 
 [:arrow_double_up:](#table-of-contents)
 ## QC
-### Fastq.gz input only
+#### Fastq.gz input only
 * back-reference-qc: use this pipeline for non-human contamination of reads.
-### Fasta.gz + its own Illumina input
+#### Fasta.gz + its own Illumina input
 * merqury: use this tool/pipeline to assess quality of genome assembly
-### Bam input
+#### Bam input
 * verifybamid: use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
 
 [:arrow_double_up:](#table-of-contents)
@@ -55,9 +58,9 @@ This step is produces a BAM.
 [:arrow_double_up:](#table-of-contents)
 
 ## Refined callset
-### SVPOP sampleset merging of SVs
-### Discovery curve
-### DNM validation
+#### SVPOP sampleset merging of SVs
+#### Discovery curve
+#### DNM validation
 
 [:arrow_double_up:](#table-of-contents)
 
@@ -70,6 +73,11 @@ This step produces a methylation bed file and bigwig files of the beds.
 
 [:arrow_double_up:](#table-of-contents)
 
+## Analyses
+#### Contiguous chromosome X
+#### DNM visualization
+#### DMR identification
+
 ## FAQ
 1. I think the sample is contaminated, how should I investigate?
    1. Try verifybamid either for each cell *or* for the entire sample aligned against the same reference as its Illumina bam.
@@ -79,3 +87,7 @@ This step produces a methylation bed file and bigwig files of the beds.
    2. Estimate the sex using [this script](https://github.com/projectoriented/bio-utils/blob/main/sex-estimator.py) either for each cell or the entire sample. The input must be a BAM.
 
 [:arrow_double_up:](#table-of-contents)
+
+## Housekeeping
+1. SFARI data deposition
+2. Scripts that routinely updates the google sheets.
