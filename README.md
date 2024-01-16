@@ -12,7 +12,7 @@ A place to log tasks involved for this project- either executed sequentially or 
 ## Inputs
 ### Sample origin/cohort
 
-| -: [:arrow_double_up:](#table-of-contents) |
+<div align="right"> [:arrow_double_up:](#table-of-contents) </div>
 ## QC
 ### Fastq.gz input only
 * back-reference-qc: use this pipeline for non-human contamination of reads.
