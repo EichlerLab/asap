@@ -58,6 +58,9 @@ This step is produces a BAM. And can be achieved via: https://eichlerlab.gs.wash
 * HiFi fastq.gz input
   * [pbmm2](https://github.com/PacificBiosciences/pbmm2)
 * Illumina fastq.gz input
+  * ```shell
+cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/data/Illumina/WGS
+```
 
 [:arrow_double_up:](#table-of-contents)
 
