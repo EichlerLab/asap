@@ -18,7 +18,7 @@ This repo logs tasks involved for this project- either executed sequentially or 
 
 ## Inputs
 ### Sample origin/cohort
-This pertains to SSC cohort.
+This pertains to SSC + SAGE cohort.
 
 | Count | Sex (proband-sibling) | Family type |
 |:-----:|:---------------------:|------------:|
@@ -30,7 +30,6 @@ This pertains to SSC cohort.
 |   2   |           M           |        trio |
 |   1   |         F-F-F         |       penta |
 
-Separately, there are three SAGE trios: BK143, BK196, BK486.
 Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/nobackups/sample_info.tab`
 
 [:arrow_double_up:](#table-of-contents)
