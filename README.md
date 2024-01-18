@@ -161,6 +161,12 @@ https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:make
 
 ## Housekeeping
 1. SFARI data deposition
+   1. Samples deposited: https://docs.google.com/spreadsheets/d/1wfmIFOv_77eGxti2wFyhMb4woBUF4M-aH0JWb2nnWtk/edit?usp=sharing
+   ```shell
+   cd [put sharing folder here]
+   ```
 2. Scripts that routinely updates the google sheets.
+   1. To populate [sequencing_summary](https://docs.google.com/spreadsheets/d/1zVep6eqqjfbRuvZyrpOQtYIZPCeyc2ywDwBS42BQHo8/edit#gid=0)
+   2. To populate [Autism_Long_Read_Project_Yang_Mei](https://docs.google.com/spreadsheets/d/1NYBlpsY9rizPnUMT_qE1oHg8ZGnYocCaMk7CXciZqyk/edit#gid=1556958106)
 
 [:arrow_double_up:](#table-of-contents)
