@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Script to identify inheritance
-Usage: ./process_DC_output.py --genotypes --merge_map --disc_curve -t 10
+Usage: ./process_DC_output.py --merge_map --disc_curve variants_bg_ALL-sv_insdel.tsv.gz -t 10
 Author: Mei Wu https://github.com/projectoriented
 """
 import pandas as pd

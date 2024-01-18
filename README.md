@@ -124,10 +124,8 @@ Instructions are [here](notes/denovo_correction.md)
 
 ## Methylation
 This step produces a methylation bed file and bigwig files of the beds. The pipeline for both technologies are here: https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:methylation
-* HiFi data
-  * [pb-CpG-tools](https://github.com/PacificBiosciences/pb-CpG-tools)
-* ONT data
-  * [modkit](https://github.com/nanoporetech/modkit)
+* When input is HiFi data, [pb-CpG-tools](https://github.com/PacificBiosciences/pb-CpG-tools) is used.
+* When input is ONT data, [modkit](https://github.com/nanoporetech/modkit) is used.
 
 [:arrow_double_up:](#table-of-contents)
 
