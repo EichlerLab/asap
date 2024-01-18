@@ -101,6 +101,9 @@ cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/
 ```
 
 #### Discovery curve
+Instructions are [here](notes/discovery_curve.md)
+
+Explanation of `config.yaml`:
 
 #### DNM validation
 

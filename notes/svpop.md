@@ -54,6 +54,6 @@ pav-hifi        pavbed  DEFAULT GRCh38/pav/1.1.2/all/results/{sample}/bed/ 1.1.2
 # getting the bed files for each sample
 ./runsnake 80 results/variant/caller/{pav-hifi,pbsv-hifi}/${sample}/{all,lc}/{all,notr}/bed/sv_{ins,del,insdel}.bed.gz
 
-# Merge the variants in sampleset
-echo results/variant/sampleset/asd/family/{all,lc}/{all,notr}/bed/sv_{insdel,ins,del}.bed.gz | tr ' ' '\n'
+# get the merge of two callsets
+./runsnake 80 results/variant/sampleset/asd/family/{all,lc}/{all,notr}/bed/sv_{insdel,ins,del}.bed.gz
 ```
