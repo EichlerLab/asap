@@ -91,8 +91,12 @@ cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/
 ```
 #### SVPOP sampleset merging of SVs
 * [SVPOP](https://github.com/EichlerLab/svpop): [instructions here](notes/svpop.md)
+1. Get the reformatted bed files for each caller, e.g. pav-hifi
+2. Get the sampleset merge bed file
+3. Get the annotations
 
 #### Data table to get annotations
+* The config
 ```shell
 cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/data_table
 ./runsnake 30 -p $(cat first_target.txt) && ./runsnake 30 -p $(cat second_target.txt)
@@ -103,9 +107,18 @@ cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/
 #### Discovery curve
 Instructions are [here](notes/discovery_curve.md)
 
-Explanation of `config.yaml`:
+Highlights:
+* `config.yaml`:
+  * `sample_order`: desired order for the output cumulative figure
+  * `full_curve`: hgsvc + hprc cumulative counts of the truthset
+  * `background`: truth set data table of SV insdel.
+* `manifest.tab`:
+  * `DATA_TABLE`: data table output that contains samples within the `sample_order`
+  * `PAV_DIR`: run directory of pav, the pipeline searches for this file `results/${sample}/bed/sv_{ins,del}.bed.gz` from the run directory- and the critical columns it searches for are ID,#CHROM,POS,END,SVTYPE,SVLEN
+  * `MERGE_MAP`: this can be found in the output of data table. example output here: `/net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/data_table/sections/asd_families/base_table/merge_map_sv_insdel.tsv.gz`
 
 #### DNM validation
+
 
 [:arrow_double_up:](#table-of-contents)
 

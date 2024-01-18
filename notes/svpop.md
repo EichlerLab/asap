@@ -56,4 +56,8 @@ pav-hifi        pavbed  DEFAULT GRCh38/pav/1.1.2/all/results/{sample}/bed/ 1.1.2
 
 # get the merge of two callsets
 ./runsnake 80 results/variant/sampleset/asd/family/{all,lc}/{all,notr}/bed/sv_{insdel,ins,del}.bed.gz
+
+# get the annotations, minus the inversions because I couldn't get it working
+./get_anno_targets.sh asd family | grep -v "inv" > anno-targets-no_inv.txt
+./runsnake 80 $(cat anno-targets-no_inv.txt) -p
 ```
