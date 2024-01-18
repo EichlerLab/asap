@@ -2,8 +2,8 @@
 https://github.com/EichlerLab/svpop
 ## Directory setup
 ```commandline
-ln -s /net/eichler/vol28/software/pipelines/svpop/svpop-3.4.0/runsnake
-ln -s /net/eichler/vol28/software/pipelines/svpop/svpop-3.4.0/runlocal
+ln -s /net/eichler/vol28/software/pipelines/svpop/svpop-3.4.2/runsnake
+ln -s /net/eichler/vol28/software/pipelines/svpop/svpop-3.4.2/runlocal
 ```
 
 ### Contents of config/config.json
@@ -28,8 +28,7 @@ ln -s /net/eichler/vol28/software/pipelines/svpop/svpop-3.4.0/runlocal
             "sourcetype": "caller",
             "sourcename": "pav-hifi",
             "merge": {
-                "sv:ins,del,insdel": "nr::szro(0.5,200,4)",
-                "sv:inv": "nr::ro(0.8)"
+                "svindel:ins,del,insdel": "nr::szro(0.5,200,4)"
             },
             "name": "ASD quads",
             "description": "Reflect aggregated and filtered PAV + pbsv variants onto the healthy HPRC + 1000g populations"

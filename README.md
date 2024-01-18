@@ -34,14 +34,14 @@ Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/noback
 
 [:arrow_double_up:](#table-of-contents)
 ## QC
-#### Fastq.gz input only
 * back-reference-qc: use this pipeline for non-human contamination of reads.
+  * minimal requirement: fastq.gz
   * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:back_reference_qc
-#### Fasta.gz + its own Illumina input
 * merqury: use this tool/pipeline to assess quality of genome assembly
+  * minimal requirement: fastq.gz and its own Illumina
   * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:merqury
-#### Bam input
 * verifybamid: use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
+  * minimal requirement: bam
   * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:nidhi12k:vbi
 
 [:arrow_double_up:](#table-of-contents)
@@ -49,6 +49,9 @@ Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/noback
 This step produces a fasta file.
 * hifiasm: use this pipeline/tool to assemble sample genome
   * **trio-phased requires** parental Illumina data as input
+  ```shell
+  cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/assemblies/hifiasm_0.16.1 && ./run_hifiasm.sh 30 -p
+  ```
 * Version used for all our samples ATM (Jan 16, 2024): hifiasm 0.16.1 with just HiFi data.
 
 [:arrow_double_up:](#table-of-contents)
@@ -64,8 +67,16 @@ This step is produces a BAM. And can be achieved via: https://eichlerlab.gs.wash
 
 ## Variant calling
 * [pbsv](https://github.com/PacificBiosciences/pbsv): use pbmm2 output as input for this
+  ```shell
+  cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/variant_calling/GRCh38/pbsv && ./run_pbsv.sh 80 all
+  # make sure you populate pbsv.tab
+  ```
 * [PAV](https://github.com/EichlerLab/pav): use hifiasm assembly output for this
   * [instructions](notes/pav.md)
+  ```shell
+  cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/variant_calling/GRCh38/pav/1.1.2 && ./run_pav.sh 80 all assemblies-all.tsv
+  # make sure you populate assemblies-all.tab
+  ```
 
 [:arrow_double_up:](#table-of-contents)
 
@@ -73,9 +84,24 @@ This step is produces a BAM. And can be achieved via: https://eichlerlab.gs.wash
 The steps here are by sequential order.
 
 #### SUBSEQ for SV validation
+```shell
+cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/sub_seq
+./get_targets.sh ${sample} > targets.txt
+./runsnake 30 $(cat targets.txt)
+```
 #### SVPOP sampleset merging of SVs
 * [SVPOP](https://github.com/EichlerLab/svpop): [instructions here](notes/svpop.md)
+
+#### Data table to get annotations
+```shell
+cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/data_table
+./runsnake 30 -p $(cat first_target.txt) && ./runsnake 30 -p $(cat second_target.txt)
+.filter_data_tbl.py tsv/variants_asd_families_sv_insdel.tsv.gz
+./get_supported_variants.py
+```
+
 #### Discovery curve
+
 #### DNM validation
 
 [:arrow_double_up:](#table-of-contents)
@@ -97,7 +123,7 @@ This step produces a methylation bed file and bigwig files of the beds. The pipe
 * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:ava_svbyeye
 
 #### DMR identification
-Group-comparison pipeline, will add on population-wise later this month
+Group-comparison pipeline
 * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:dss_snakemake
 
 ## FAQ

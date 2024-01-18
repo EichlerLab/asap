@@ -13,7 +13,10 @@ CURRENT_DATE = date.today().strftime('%Y%m%d')
 
 def get_parser():
     """Get parser"""
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=__doc__
+    )
     parser.add_argument('filepath', nargs=1)
     parser.add_argument('--which_one', choices=["sample_summary"])
     return parser
