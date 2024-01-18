@@ -95,8 +95,7 @@ cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/
 2. Get the sampleset merge bed file
 3. Get the annotations
 
-#### Data table to get annotations
-* The config
+#### Data table to summarize SVPOP annotations
 ```shell
 cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/data_table
 ./runsnake 30 -p $(cat first_target.txt) && ./runsnake 30 -p $(cat second_target.txt)
@@ -118,6 +117,7 @@ Highlights:
   * `MERGE_MAP`: this can be found in the output of data table. example output here: `/net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/data_table/sections/asd_families/base_table/merge_map_sv_insdel.tsv.gz`
 
 #### DNM validation
+Instructions are [here](notes/denovo_correction.md)
 
 
 [:arrow_double_up:](#table-of-contents)
@@ -160,12 +160,11 @@ sample=14455_p1
 # File of File Names (fofn)
 # hifi
 ls -lrtha $LRA/clinical/${sample}/raw_data/PacBio_HiFi/fofn/ccs/fastq.fofn
-# ont
-PATH="/net/eichler/vol28/software/pipelines/compteam_tools:$PATH"
-make_ont_fofn.py --sample ${sample} \
-  --proj_dir $LRA/clinical \
-  --output ${sample}.fofn \
-  --filter_string 'lib=STD;model=sup.*;bc=guppy;ver=6;ftype=bam'
+
+# ont- peep the link below for instructions to generate independently
+cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/methylation/fastq_fofn/ && ./get-fastq.sh
+
+cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/methylation/unmapped_bam_fofn/ && ./get-unmapped-bam.sh
 
 # hifiasm assemblies
 ls -lrtha $LRA/clinical/${sample}/assemblies/hifiasm
