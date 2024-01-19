@@ -6,12 +6,19 @@ This repo logs tasks involved for this project- either executed sequentially or 
 ##### Table of Contents
 * [Inputs](#inputs)
 * [QC](#qc)
+  * [back-reference-qc](#back-reference-qc)
+  * [merqury](#merqury)
+  * [verifybamid](#verifybamid)
+  * [sex-verify](#sex-verify)
 * [Genome Assembly](#genome-assembly)
 * [Alignment](#alignment)
 * [Variant calling](#variant-calling)
 * [Getting a refined call set](#refined-callset)
 * [Methylation](#methylation)
 * [Analyses](#analyses)
+  * [Contiguous chromosome X](#contiguous-chromosome-x)
+  * [DNM visualization](#dnm-visualization)
+  * [DMR identification](#dmr-identification)
 * [FAQ](#faq)
 * [Paths](#paths)
 * [Housekeeping](HOUSEKEEPING.md)
@@ -34,15 +41,26 @@ Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/noback
 
 [:arrow_double_up:](#table-of-contents)
 ## QC
-* back-reference-qc: use this pipeline for non-human contamination of reads.
+##### back-reference-qc
+* use this pipeline for non-human contamination of reads.
   * minimal requirement: fastq.gz
   * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:back_reference_qc
-* merqury: use this tool/pipeline to assess quality of genome assembly
-  * minimal requirement: fastq.gz and its own Illumina
-  * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:merqury
-* verifybamid: use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
-  * minimal requirement: bam
-  * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:nidhi12k:vbi
+##### merqury
+* use this tool/pipeline to assess quality of genome assembly
+    * minimal requirement: fastq.gz and its own Illumina
+    * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:merqury
+##### verifybamid 
+use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
+    * minimal requirement: bam
+    * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:nidhi12k:vbi
+##### sex-verify
+use this to check either per cell or sample for sex verification
+    * minimal requirement: bam
+    ```shell
+    cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/qc/sex-verify
+    # modify the config.yaml and manifest.tab as needed
+    ./run.sh 30 -p
+    ```
 
 [:arrow_double_up:](#table-of-contents)
 ## Genome Assembly
@@ -155,7 +173,7 @@ Group-comparison pipeline
    2. Try back-reference-qc to see how much non-human contamination there is and remove it from the fastq.gz
 2. I think the sample is of different sex, what to do?
    1. Try looking at coverage over the SRY gene for quick visualization
-   2. Estimate the sex using [this script](https://github.com/projectoriented/bio-utils/blob/main/sex-estimator.py) either for each cell or the entire sample. The input must be a BAM.
+   2. Estimate the sex using [this script](https://github.com/projectoriented/bio-utils/blob/main/sex-estimator.py) either for each cell or the entire sample. The input must be a BAM. FYI: the script is already in one of the QC folders but it may not be the newest version.
 3. How do I make ONT fofns?
    1. https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:make_ont_fofn
 4. Where are the HiFi fofns?

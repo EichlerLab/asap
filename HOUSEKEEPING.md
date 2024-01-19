@@ -71,6 +71,7 @@ As far as I know, only `yangsui@uw.edu` & `wumei@uw.edu` can write to this sheet
 export LRA=/net/eichler/vol28/projects/long_read_archive/nobackups && ./populate-autism_gsheets.sh
 ```
 The python scripts expects an LRA environment variable.
+
 3. Set up your crontabs.
 
 [:arrow_double_up:](#table-of-contents)
