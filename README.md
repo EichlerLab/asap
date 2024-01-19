@@ -50,11 +50,11 @@ Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/noback
     * minimal requirement: fastq.gz and its own Illumina
     * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:merqury
 ##### verifybamid 
-use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
+* use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
     * minimal requirement: bam
     * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:nidhi12k:vbi
 ##### sex-verify
-use this to check either per cell or sample for sex verification
+* use this to check either per cell or sample for sex verification
     * minimal requirement: bam
     ```shell
     cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/qc/sex-verify
