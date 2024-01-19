@@ -22,3 +22,9 @@ SAMPLE DATA_TABLE PAV_DIR MERGE_MAP
 ```shell
 ./runlocal 30 -p
 ```
+
+### When it is done
+Use the script [`process_DC_output.py`](../pipeline_scripts/process_DC_output.py)
+```shell
+./process_DC_output.py --merge_map data_table/sections/asd_families/base_table/merge_map_sv_insdel.tsv.gz --disc_curve discovery_curve/results/variants_bg-ALL-sv_insdel.tsv.gz -t 20 -o all.tsv.gz
+```
