@@ -5,7 +5,7 @@ Here you can find tasks related to SFARI deposition, quick_stats generation, and
 * [SFARI data deposition](#sfari)
 * [Auto-populate google sheets](#google-sheets)
   * [sequencing_summary](#populate-sequencing-summary)
-  * [Autism_Long_Read_Project_Yang_Mei](#populate-autism-sheets)
+  * [yang_autism_sheets](#populate-autism-sheets)
 * [Generate quick-stats](#quick-stats)
 * [FAQ](#faq)
 
@@ -38,7 +38,7 @@ To perform any of these steps, you must first get your `credentials.json`- got h
 Any time you run a script to update the google sheets, make sure the `credentials.json` and `token.json` (this is generated the first time you do your biz) in the same working directory.
 
 ### Populate sequencing summary
-[sequencing_summary](https://docs.google.com/spreadsheets/d/1zVep6eqqjfbRuvZyrpOQtYIZPCeyc2ywDwBS42BQHo8/edit#gid=0)
+[sequencing_summary google sheets](https://docs.google.com/spreadsheets/d/1zVep6eqqjfbRuvZyrpOQtYIZPCeyc2ywDwBS42BQHo8/edit#gid=0)
 1. Get the entire contents of this [folder](housekeeping_scripts/gs-sequencing_summary) and the directory should look like the below.
 ```text
 .
@@ -51,14 +51,15 @@ Any time you run a script to update the google sheets, make sure the `credential
 export LRA=/net/eichler/vol28/projects/long_read_archive/nobackups && ./populate-gsheets_sequencing-summary.sh
 ```
 The python scripts expects an LRA environment variable.
+
 3. Set up your crontabs.
 
 [:arrow_double_up:](#table-of-contents)
 
 ### Populate autism sheets
-[Autism_Long_Read_Project_Yang_Mei](https://docs.google.com/spreadsheets/d/1NYBlpsY9rizPnUMT_qE1oHg8ZGnYocCaMk7CXciZqyk/edit#gid=1556958106)
+[Autism_Long_Read_Project_Yang_Mei google sheets](https://docs.google.com/spreadsheets/d/1NYBlpsY9rizPnUMT_qE1oHg8ZGnYocCaMk7CXciZqyk/edit#gid=1556958106)
 
-As far as I know, only yangsui@uw.edu & wumei@uw.edu can write to this sheet at the moment.
+As far as I know, only `yangsui@uw.edu` & `wumei@uw.edu` can write to this sheet at the moment.
 1. Get the entire contents of this [folder](housekeeping_scripts/autism-sheets) and the directory should look like the below.
 ```text
 .
