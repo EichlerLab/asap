@@ -32,3 +32,4 @@ Use the script [`process_DC_output.py`](../pipeline_scripts/process_DC_output.py
   -t 20 \
   -o all.tsv.gz
 ```
+You will get two outputs: 1) all.tsv.gz (the name you put) 2) asd-subset.tsv.gz is a hardcoded output.

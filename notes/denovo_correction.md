@@ -9,7 +9,7 @@ cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/
 mkdir -p beds
 
 module load miniconda/4.12.0
-cd beds && ./get_beds.py file-after-discovery-curve-and-appended-family-info.tsv.gz
+cd beds && ./get_beds.py asd-subset.tsv.gz
 
 # make sure to modify definitions.snakefile if necessary
 less definitions.snakefile
@@ -17,7 +17,7 @@ less definitions.snakefile
 
 ### Get the targets & run
 ```shell
-ls -d beds/* | grep -Eo "[BK0-9]{5}_.{2}" | sort -u | while read line; do ./get_target.sh $line; done > targets.txt
+ls -d beds/* | grep -Eo "[BK0-9]{5}_.{2}" | sort -u | while read line; do ./get_targets.sh $line; done > targets.txt
 ./runsnake 100 $(cat targets.txt) -p
 ```
 
