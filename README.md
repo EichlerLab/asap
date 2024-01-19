@@ -14,6 +14,7 @@ This repo logs tasks involved for this project- either executed sequentially or 
 * [Analyses](#analyses)
 * [FAQ](#faq)
 * [Paths](#paths)
+* [Housekeeping](HOUSEKEEPING.md)
 
 ## Inputs
 ### Sample origin/cohort
