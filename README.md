@@ -156,6 +156,10 @@ Group-comparison pipeline
 2. I think the sample is of different sex, what to do?
    1. Try looking at coverage over the SRY gene for quick visualization
    2. Estimate the sex using [this script](https://github.com/projectoriented/bio-utils/blob/main/sex-estimator.py) either for each cell or the entire sample. The input must be a BAM.
+3. How do I make ONT fofns?
+   1. https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:make_ont_fofn
+4. Where are the HiFi fofns?
+   1. $LRA/clinical/${sample}/raw_data/PacBio_HiFi/fofn/ccs/fastq.fofn
 
 [:arrow_double_up:](#table-of-contents)
 
@@ -168,7 +172,7 @@ sample=14455_p1
 # hifi
 ls -lrtha $LRA/clinical/${sample}/raw_data/PacBio_HiFi/fofn/ccs/fastq.fofn
 
-# ont- peep the link below for instructions to generate independently
+# ont- get link from FAQ for instructions to generate independently
 cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/methylation/fastq_fofn/ && ./get-fastq.sh
 
 cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/methylation/unmapped_bam_fofn/ && ./get-unmapped-bam.sh
@@ -176,7 +180,5 @@ cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/methylation/unma
 # hifiasm assemblies
 ls -lrtha $LRA/clinical/${sample}/assemblies/hifiasm
 ```
-
-https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:make_ont_fofn
 
 [:arrow_double_up:](#table-of-contents)
