@@ -1,7 +1,7 @@
 ## Directory setup
 ```commandline
-ln -s /net/eichler//vol28/software/pipelines/disc_curve/runsnake
-ln -s /net/eichler//vol28/software/pipelines/disc_curve/runlocal
+ln -s /net/eichler/vol28/software/pipelines/disc_curve/runsnake
+ln -s /net/eichler/vol28/software/pipelines/disc_curve/runlocal
 ```
 
 ### Contents of config.yaml

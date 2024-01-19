@@ -94,6 +94,11 @@ cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/
 1. Get the reformatted bed files for each caller, e.g. pav-hifi
 2. Get the sampleset merge bed file
 3. Get the annotations
+```shell
+cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/svpop
+./runsnake 100 -p $(./get_intersect_targets.sh 14455_p1)
+./runsnake 100 $(cat ./get_anno_targets.sh asd family | grep -v "inv") -p
+```
 
 #### Data table to summarize SVPOP annotations
 ```shell
@@ -116,9 +121,13 @@ Highlights:
   * `PAV_DIR`: run directory of pav, the pipeline searches for this file `results/${sample}/bed/sv_{ins,del}.bed.gz` from the run directory- and the critical columns it searches for are ID,#CHROM,POS,END,SVTYPE,SVLEN
   * `MERGE_MAP`: this can be found in the output of data table. example output here: `/net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/data_table/sections/asd_families/base_table/merge_map_sv_insdel.tsv.gz`
 
+```shell
+cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/discovery_curve
+# modify manifest.tab and config.yaml
+./runlocal -p
+```
 #### DNM validation
 Instructions are [here](notes/denovo_correction.md)
-
 
 [:arrow_double_up:](#table-of-contents)
 
