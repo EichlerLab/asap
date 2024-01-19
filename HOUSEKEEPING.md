@@ -1,5 +1,5 @@
 # Housekeeping
-Here you can find tasks related to SFARI deposition, and routinely updating google sheets.
+Here you can find tasks related to SFARI deposition, quick_stats generation, and routinely updating google sheets.
 
 ##### Table of Contents
 * [SFARI data deposition](#sfari)
@@ -22,9 +22,10 @@ mkdir submission_batch_1 && cd $_
 ```
 
 ## Quick stats
+The scripts are here for each [ont](housekeeping_scripts/get_ont_stats.sh) and [pacbio](housekeeping_scripts/get_pb_stats.sh)
 1. Make sure you have permissions to write in the long read archive.
-2. Set up your crontabs separately for each [ont](housekeeping_scripts/get_ont_stats.sh) and [pacbio](housekeeping_scripts/get_pb_stats.sh)
-3. You can find the usage of the script by looking at the script.
+2. Get the above scripts and freely execute the script, e.g `./get_ont_stats.sh`
+3. Set up your crontabs separately.
 
 [:arrow_double_up:](#table-of-contents)
 
@@ -52,6 +53,7 @@ The python scripts expects an LRA environment variable.
 
 ### Populate autism sheets
 [Autism_Long_Read_Project_Yang_Mei](https://docs.google.com/spreadsheets/d/1NYBlpsY9rizPnUMT_qE1oHg8ZGnYocCaMk7CXciZqyk/edit#gid=1556958106)
+
 As far as I know, only yangsui@uw.edu & wumei@uw.edu can write to this sheet at the moment.
 1. Get the entire contents of this [folder](housekeeping_scripts/autism-sheets) and the directory should look like the below.
 ```text
