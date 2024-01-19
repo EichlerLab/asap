@@ -11,6 +11,7 @@ Here you can find tasks related to SFARI deposition, quick_stats generation, and
 
 ## SFARI
 Samples deposited: https://docs.google.com/spreadsheets/d/1wfmIFOv_77eGxti2wFyhMb4woBUF4M-aH0JWb2nnWtk/edit?usp=sharing
+1. Please make sure the fastq.gz are cleaned of non-human reads before submission. You could do this using back-reference-qc pipeline.
 
 Get the script [here](housekeeping_scripts/sfari_data_deposit.py) 
 ```shell
