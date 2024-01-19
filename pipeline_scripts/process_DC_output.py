@@ -82,6 +82,10 @@ def main():
     # Write out
     asd_parser_object.write_out(out_name=args.output)
 
+    # Write out ASD subset
+    asd_parser_object.get_asd_subset().to_csv("asd-subset.tsv.gz", index=False, header=True, sep='\t')
+    print('asd-subset.tsv.gz written, bye.')
+
 
 class ASDParser:
 
@@ -201,22 +205,40 @@ class ASDParser:
         return self.df
 
     def get_event_type(self):
-        self.df = self.stratify_children_counts()
-
-        self.df['PUTATIVE_DENOVO'] = self.df.apply(
-            lambda x: 1 if (x.POP_FREQ == 0) and (x.ASD_FREQ == 1) and (sum([x.N_PROBAND, x.N_SIBLING]) == 1) else 0, axis=1)
-
         self.df['N_INHERITED'] = self.df.apply(
             lambda x: self._n_inherited(x.MERGE_SAMPLES) if (x.POP_FREQ == 0) else 0,
             axis=1)
 
+        def assign_event_type(row):
+            n_families = row.FAMILY.split(",")
+            n_children = sum([row.N_PROBAND, row.N_SIBLING])
+            if row.POP_FREQ == 0:
+                if (row.ASD_FREQ == 1) and (row.N_INHERITED == 0) and (n_children == 1):
+                    return "PUTATIVE_DENOVO"
+                elif (row.N_PROBAND > 1) and (row.N_SIBLING == 0):
+                    return "PROBAND_SHARED"
+                elif (row.N_PROBAND == 0) and (row.N_SIBLING > 1):
+                    return "SIBLING_SHARED"
+                elif (len(n_families) == 1) and (row.N_PROBAND >= 1) and (row.N_SIBLING >= 1):
+                    return "CHILDREN_SHARED"
+                elif (len(n_families) == 1) and (n_children == 1):
+                    return "PRIVATE_INHERITED"
+                else:
+                    return "N/A"
+            else:
+                return "N/A"
+
+        self.df['EVENT_TYPE'] = self.df.apply(assign_event_type, axis=1)
+
         return self.df
 
     def get_inheritance(self):
-        self.df = self.get_event_type()
+        self.df = self.stratify_children_counts()
 
         self.df = self.get_families()
         self.df = self.get_inherited_from()
+
+        self.df = self.get_event_type()
         return self.df
 
     def add_column(self, col_name, val):
@@ -273,7 +295,7 @@ def gt_in_sample(id_name: str, df):
 
     return pd.DataFrame(
         data={
-            'MERGE_GT': [genotypes]
+            'MERGE_GT': genotypes
         }, index=[id_name]
     )
 
