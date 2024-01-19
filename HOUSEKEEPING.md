@@ -10,7 +10,9 @@ Here you can find tasks related to SFARI deposition, quick_stats generation, and
 * [FAQ](#faq)
 
 ## SFARI
-* Samples deposited: https://docs.google.com/spreadsheets/d/1wfmIFOv_77eGxti2wFyhMb4woBUF4M-aH0JWb2nnWtk/edit?usp=sharing
+Samples deposited: https://docs.google.com/spreadsheets/d/1wfmIFOv_77eGxti2wFyhMb4woBUF4M-aH0JWb2nnWtk/edit?usp=sharing
+
+Get the script [here](housekeeping_scripts/sfari_data_deposit.py) 
 ```shell
 cd /net/eichler/vol28/projects/long_read_archive/nobackups/sharing/SFARI
 
@@ -31,6 +33,7 @@ The scripts are here for each [ont](housekeeping_scripts/get_ont_stats.sh) and [
 
 ## Google sheets
 To perform any of these steps, you must first get your `credentials.json`- got here: https://developers.google.com/sheets/api/quickstart/python#enable_the_api
+
 Any time you run a script to update the google sheets, make sure the `credentials.json` and `token.json` (this is generated the first time you do your biz) in the same working directory.
 
 ### Populate sequencing summary
