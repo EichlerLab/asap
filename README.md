@@ -115,7 +115,6 @@ cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/
 ```shell
 cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/svpop
 ./runsnake 100 -p $(./get_intersect_targets.sh 14455_p1)
-./runsnake 100 $(cat ./get_anno_targets.sh asd family | grep -v "inv") -p
 ```
 
 #### Data table to summarize SVPOP annotations
