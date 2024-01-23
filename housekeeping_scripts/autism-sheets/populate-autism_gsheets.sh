@@ -19,7 +19,7 @@ do
 
   target_file=db-${nt}.tsv.gz
   target_sheet=db-${nt}
-  ~/nobackups/scripts/autism-sheets.py prepare\
+  ./autism-sheets.py prepare\
     --sample_file /net/eichler/vol28/projects/autism_genome_assembly/nobackups/sample_info.tab \
     --tech $t \
     --illumina_fofn_prefix /net/eichler/vol28/projects/autism_genome_assembly/nobackups/data/Illumina/WGS/fastq/fofn \
