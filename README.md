@@ -101,12 +101,6 @@ This step is produces a BAM. And can be achieved via: https://eichlerlab.gs.wash
 ## Refined callset
 The steps here are by sequential order.
 
-#### SUBSEQ for SV validation
-```shell
-cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/sub_seq
-./get_targets.sh ${sample} > targets.txt
-./runsnake 30 $(cat targets.txt)
-```
 #### SVPOP sampleset merging of SVs
 * [SVPOP](https://github.com/EichlerLab/svpop): [instructions here](notes/svpop.md)
 1. Get the reformatted bed files for each caller, e.g. pav-hifi
@@ -115,6 +109,13 @@ cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/
 ```shell
 cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/svpop
 ./runsnake 100 -p $(./get_intersect_targets.sh 14455_p1)
+```
+
+#### SUBSEQ for SV validation
+```shell
+cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/post_processing/GRCh38/sub_seq
+./get_targets.sh ${sample} > targets.txt
+./runsnake 30 $(cat targets.txt)
 ```
 
 #### Data table to summarize SVPOP annotations
