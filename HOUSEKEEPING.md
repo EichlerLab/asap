@@ -33,7 +33,7 @@ The scripts are here for each [ont](housekeeping_scripts/get_ont_stats.sh) and [
 [:arrow_double_up:](#table-of-contents)
 
 ## Google sheets
-To perform any of these steps, you must first get your `credentials.json`- got here: https://developers.google.com/sheets/api/quickstart/python#enable_the_api
+To perform any of the steps in this section, you must first get your `credentials.json`- got here: https://developers.google.com/sheets/api/quickstart/python#enable_the_api. You need to enable both Google Sheets API and Google Drive API.
 
 Any time you run a script to update the google sheets, make sure the `credentials.json` and `token.json` (this is generated the first time you do your biz) in the same working directory.
 

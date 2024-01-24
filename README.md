@@ -45,14 +45,17 @@ Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/noback
 * use this pipeline for non-human contamination of reads.
   * minimal requirement: fastq.gz
   * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:back_reference_qc
+  * `cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/qc/back-reference-qc`
 ##### merqury
 * use this tool/pipeline to assess quality of genome assembly
     * minimal requirement: fastq.gz and its own Illumina
     * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:merqury
+    * `cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/qc/merqury`
 ##### verifybamid 
 * use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
     * minimal requirement: bam
     * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:nidhi12k:vbi
+    * `cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/qc/verifybamid`
 ##### sex-verify
 * use this to check either per cell or sample for sex verification
     * minimal requirement: bam
@@ -177,7 +180,7 @@ Group-comparison pipeline
 3. How do I make ONT fofns?
    1. https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:make_ont_fofn
 4. Where are the HiFi fofns?
-   1. $LRA/clinical/${sample}/raw_data/PacBio_HiFi/fofn/ccs/fastq.fofn
+   1. `$LRA/clinical/${sample}/raw_data/PacBio_HiFi/fofn/ccs/fastq.fofn`
 
 [:arrow_double_up:](#table-of-contents)
 
