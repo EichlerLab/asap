@@ -1,0 +1,5 @@
+manifest: manifest.tab
+target_ref: CHM13v2
+reference:
+ CHM13v2: /net/eichler/vol28/eee_shared/assemblies/CHM13/T2T/v2.0/T2T-CHM13v2.fasta
+tech: hifi

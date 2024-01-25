@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 This is to prepare the processed SSC samples for SFARI long-read sequencing data deposition. Currently only supports PacBio + Nanopore data
-Usage: sfari_data_deposit.py --sample 11918_s1:SSC --proj_dir
+Usage: sfari_data_deposit.py --sample 11918_s1:SSC --proj_dir --ont_dtype fast5
 Author: Mei Wu https://github.com/projectoriented
 """
 import sys
@@ -25,9 +25,14 @@ logging.basicConfig(stream=sys.stdout, level="INFO", format='%(asctime)s - %(lev
 
 def get_parser():
     """Get parser"""
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        description=__doc__
+    )
     parser.add_argument('--sample', metavar='14232_p1:SSC10694', required=True,
                         help='sample:ssc_name', default=None)
+    parser.add_argument('--ont_dtype', required=False,
+                        help='ONT raw data type', default='fast5', choices=['fast5', 'pod5'])
     parser.add_argument('--proj_dir', help='LRA directory to the samples', required=True)
     parser.add_argument(
         '--threads', help='Threads used in hard linking + generating MD5', required=False, default=8, type=int
@@ -40,10 +45,11 @@ def main():
     args = parser.parse_args()
 
     sample_name, ssc_name = args.sample.split(":")
+    ont_raw_data_type = args.ont_dtype
     threads = args.threads
 
     # ------------------------------- Process ONT ------------------------------- #
-    ont_obj = ONTTree(sample=sample_name, prefix=args.proj_dir, ssc_name=ssc_name)
+    ont_obj = ONTTree(sample=sample_name, prefix=args.proj_dir, ssc_name=ssc_name, raw_data_type=ont_raw_data_type)
     ont_df = ont_obj.desired_tree_df()
 
     distribute_hard_link_jobs(src_list=ont_df["src_file"], dest_list=ont_df["dest_file"], threads=threads)
@@ -192,15 +198,15 @@ class MD5Generator:
     def fetch_md5sum(self):
         md5sums_dict = {}
         for k in self.search_dict.keys():
-            if not os.path.exists(k):
-                fl = []
-                for each_file in self.search_dict[k]:
-                    LOG.info(f"making md5: {each_file}")
-                    fl.append(self.make_md5sum(file_name=each_file))
-                    LOG.info(f"md5 fetched: {each_file}")
-                md5sums_dict[k] = fl
-            else:
-                LOG.debug(f"{k} exists, ignoring.")
+            # if not os.path.exists(k):
+            fl = []
+            for each_file in self.search_dict[k]:
+                LOG.info(f"making md5: {each_file}")
+                fl.append(self.make_md5sum(file_name=each_file))
+                LOG.info(f"md5 fetched: {each_file}")
+            md5sums_dict[k] = fl
+            # else:
+            #     LOG.debug(f"{k} exists, ignoring.")
         return md5sums_dict
 
     def write_md5sums(self):
@@ -354,14 +360,14 @@ class HiFiTree:
 
 
 class ONTTree:
-    def __init__(self, sample, prefix, ssc_name):
+    def __init__(self, sample, prefix, ssc_name, raw_data_type="fast5"):
         self.sample = sample
         self.prefix = prefix
         self.ssc_name = ssc_name
         self.raw_data_md5_df = pd.DataFrame()
         self.library = "STD"
         self.basecall_md5_files = []
-        self.raw_data_type = "fast5"
+        self.raw_data_type = raw_data_type
         self.dest_dir_list = []
 
     def get_data(self):
@@ -381,8 +387,8 @@ class ONTTree:
             [pd.read_table(x, usecols=["RUN_ID", "DEST_PATH", "SIZE", "MD5"]) for x in copy_record_list]
         ).reset_index(drop=True)
 
-        # Only take files with .fast5 extension.
-        df = df[df.DEST_PATH.str.contains("\.fast5")]
+        # Only take files with raw_data_type extension.
+        df = df[df.DEST_PATH.str.contains(f".{self.raw_data_type}")]
 
         for entry in df.itertuples():
             path_split = entry.DEST_PATH.split(os.sep)

@@ -28,6 +28,4 @@ less -S denovo_corrected.tsv.gz
 ```
 
 ### Merge with original
-```shell
-
-```
+Please merge the output of 1) data table (the filtered one if it exists), 2) `asd-subset.tsv.gz`, and 3) `denovo_corrected.tsv.gz` based on the IDs. This is a good opportunity to customize the final SV table you view.

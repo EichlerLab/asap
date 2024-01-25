@@ -176,7 +176,7 @@ Group-comparison pipeline
    2. Try back-reference-qc to see how much non-human contamination there is and remove it from the fastq.gz
 2. I think the sample is of different sex, what to do?
    1. Try looking at coverage over the SRY gene for quick visualization
-   2. Estimate the sex using [this script](https://github.com/projectoriented/bio-utils/blob/main/sex-estimator.py) either for each cell or the entire sample. The input must be a BAM. FYI: the script is already in one of the QC folders but it may not be the newest version.
+   2. Estimate the sex [click here for notes](notes/sex-verify.md) either for each cell or the entire sample. The input must be a BAM.
 3. How do I make ONT fofns?
    1. https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:make_ont_fofn
 4. Where are the HiFi fofns?
