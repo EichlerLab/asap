@@ -2,10 +2,10 @@
 https://github.com/EichlerLab/svpop
 ## Directory setup
 ```commandline
-ln -s /net/eichler/vol28/software/pipelines/svpop/svpop-3.4.2/runsnake
-ln -s /net/eichler/vol28/software/pipelines/svpop/svpop-3.4.2/runlocal
+ln -s /net/eichler/vol28/projects/structural_variation/nobackups/tools/svpop/202301/runsnake
+ln -s /net/eichler/vol28/projects/structural_variation/nobackups/tools/svpop/202301/runsnake
 ```
-
+Jan 25, 2024: Yang & I noticed a problem with 3.4.2 of SVPOP where an intersection variant of 14133_fa did not show up in the pav-hifi sampleset merge. We will go back to old version
 ### Contents of config/config.json
 ```json
 {

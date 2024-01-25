@@ -10,6 +10,7 @@ manifest_df = pd.read_table(
 
 target_ref = config["target_ref"]
 tech = config["tech"]
+MINIMAP2_PARAMS=config.get('minimap2_params', '')
 
 def calc_mem_gb(wildcards, input, attempt, threads):
     mb = max(1.5 * input.size_mb, 1000)
