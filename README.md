@@ -59,6 +59,7 @@ Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/noback
 ##### sex-verify
 * use this to check either per cell or sample for sex verification
     * minimal requirement: bam
+    * [click here for notes](notes/sex-verify.md)
     ```shell
     cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/qc/sex-verify
     # modify the config.yaml and manifest.tab as needed

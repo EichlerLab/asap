@@ -23,6 +23,6 @@ If you want to check for ONT data, then just make a manifest called manifest-ont
 # example for ont
 ./work.sh 80 --config manifest=manifest-ont.tab tech=ont -p
 
-# example for ont
+# example for hifi
 ./work.sh 80 -p
 ```
