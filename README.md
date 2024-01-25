@@ -162,7 +162,7 @@ This step produces a methylation bed file and bigwig files of the beds. The pipe
 
 ## Analyses
 #### Contiguous chromosome X
-* https://github.com/projectoriented/contiguous-X
+* https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:contiguous-x
 
 #### DNM visualization
 * https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:ava_svbyeye
