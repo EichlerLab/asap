@@ -371,7 +371,7 @@ class ONTTree:
         self.dest_dir_list = []
 
     def get_data(self):
-        path_obj = pathlib.Path(self.prefix, self.sample, "raw_data/ont", self.library)
+        path_obj = pathlib.Path(self.prefix, self.sample, "raw_data/nanopore", self.library)
 
         # Check if empty
         is_empty = is_empty_dir(path_obj=path_obj)
@@ -381,7 +381,7 @@ class ONTTree:
                 "copy_record" in x.as_posix() or self.raw_data_type in x.as_posix()
             ]
         else:
-            raise OSError(f"No ont {self.library}/{self.raw_data_type} for {self.sample}|{self.ssc_name}")
+            raise OSError(f"No nanopore {self.library}/{self.raw_data_type} for {self.sample}|{self.ssc_name}")
 
         df = pd.concat(
             [pd.read_table(x, usecols=["RUN_ID", "DEST_PATH", "SIZE", "MD5"]) for x in copy_record_list]
@@ -389,6 +389,11 @@ class ONTTree:
 
         # Only take files with raw_data_type extension.
         df = df[df.DEST_PATH.str.contains(f".{self.raw_data_type}")]
+
+        if df.empty:
+            LOG.warning(f"No files found with this suffix: .{self.raw_data_type} in {copy_record_list}. Trying ")
+            sys.exit(1)
+        [os.path.join(x.parent, x.name) for x in path_obj.glob(fr"*/*/{}/*.{}")]
 
         for entry in df.itertuples():
             path_split = entry.DEST_PATH.split(os.sep)
