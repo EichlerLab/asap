@@ -472,7 +472,6 @@ class ONTTree:
             target_dir_list = [x for x in self.dest_dir_list if run_id in x]
 
             if search_word == "raw_data":
-                df.file_name.replace({"fastq": "bam"}, regex=True, inplace=True)
                 target_name = "bam"
             else:
                 target_name = "fastq"
