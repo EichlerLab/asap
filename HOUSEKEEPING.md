@@ -11,10 +11,9 @@ Here you can find tasks related to SFARI deposition, quick_stats generation, and
 
 ## SFARI
 Samples deposited are found in this [Google Sheet](https://docs.google.com/spreadsheets/d/1NYBlpsY9rizPnUMT_qE1oHg8ZGnYocCaMk7CXciZqyk/edit#gid=1976820603)
-#module load miniconda/4.12.0 && ~/nobackups/scripts/sfari_data_deposit.py --sample 12832_mo:SSC06015 --proj_dir $LRA/clinical --ont_dtype pod5
 1. Please make sure the fastq.gz are cleaned of non-human reads before submission. You could do this using back-reference-qc pipeline.
 
-Get the script [here](housekeeping_scripts/sfari_data_deposit.py) 
+Get the script [here](housekeeping_scripts/sfari_data_deposit.py)
 ```shell
 cd /net/eichler/vol28/projects/long_read_archive/nobackups/sharing/SFARI
 
@@ -27,6 +26,23 @@ mkdir submission_batch_1 && cd $_
 # run the script
 module load miniconda/4.12.0
 ./sfari_data_deposit --proj_dir /net/eichler/vol28/projects/long_read_archive/nobackups/clinical --sample 14694_s1:SSC12738 --ont_dtype pod5
+```
+### File hierarchy
+```text
+./fastq_assembly/SSC10694
+├── fastq
+│   ├── nanopore
+│   └── PacBio_HiFi
+└── genome_assembly
+    └── hifiasm
+./raw_data/SSC10694
+├── nanopore
+│   └── STD
+└── PacBio_HiFi
+    └── files.md5
+metadata
+└── 2023-09-06
+    └── sample_metadata_2023-09-06.tsv
 ```
 
 ## Quick stats
