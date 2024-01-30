@@ -10,7 +10,8 @@ Here you can find tasks related to SFARI deposition, quick_stats generation, and
 * [FAQ](#faq)
 
 ## SFARI
-Samples deposited: https://docs.google.com/spreadsheets/d/1wfmIFOv_77eGxti2wFyhMb4woBUF4M-aH0JWb2nnWtk/edit?usp=sharing
+Samples deposited are found in this [Google Sheet](https://docs.google.com/spreadsheets/d/1NYBlpsY9rizPnUMT_qE1oHg8ZGnYocCaMk7CXciZqyk/edit#gid=1976820603)
+#module load miniconda/4.12.0 && ~/nobackups/scripts/sfari_data_deposit.py --sample 12832_mo:SSC06015 --proj_dir $LRA/clinical --ont_dtype pod5
 1. Please make sure the fastq.gz are cleaned of non-human reads before submission. You could do this using back-reference-qc pipeline.
 
 Get the script [here](housekeeping_scripts/sfari_data_deposit.py) 
@@ -20,8 +21,12 @@ cd /net/eichler/vol28/projects/long_read_archive/nobackups/sharing/SFARI
 # make a folder with a name corresponding to a submission batch, e.g. submission_batch_0-20230713
 mkdir submission_batch_1 && cd $_
 
+# find out if the sample has format is pod5 or fast5 in the long read archive
+# correspond sample id with SSC id here: /net/eichler/vol28/projects/autism_genome_assembly/nobackups/sample_info.tab
+
 # run the script
-./sfari_data_deposit --proj_dir /net/eichler/vol28/projects/long_read_archive/nobackups/clinical --sample 14694_s1:SSC12738
+module load miniconda/4.12.0
+./sfari_data_deposit --proj_dir /net/eichler/vol28/projects/long_read_archive/nobackups/clinical --sample 14694_s1:SSC12738 --ont_dtype pod5
 ```
 
 ## Quick stats
