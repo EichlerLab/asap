@@ -175,7 +175,7 @@ def get_hifi_dest_md5_df(hifi_df, search_dict):
 
 
 class MD5Generator:
-    def __init__(self, search_dict, num_workers):
+    def __init__(self, search_dict, num_workers=1):
         self.search_dict = search_dict
         self.num_workers = num_workers
 
@@ -200,7 +200,13 @@ class MD5Generator:
         for k in self.search_dict.keys():
             # if not os.path.exists(k):
             fl = []
-            for each_file in self.search_dict[k]:
+            if isinstance(self.search_dict[k], list):
+                search_space = self.search_dict[k]
+            else:
+                search_space = [self.search_dict[k]]
+
+            for each_file in search_space:
+                print(each_file)
                 LOG.info(f"making md5: {each_file}")
                 fl.append(self.make_md5sum(file_name=each_file))
                 LOG.info(f"md5 fetched: {each_file}")
@@ -377,23 +383,31 @@ class ONTTree:
         is_empty = is_empty_dir(path_obj=path_obj)
         if not is_empty:
             copy_record_list = [
-                x.as_posix() for x in list(path_obj.rglob("*.tab.gz")) if
-                "copy_record" in x.as_posix() or self.raw_data_type in x.as_posix()
+                x.as_posix() for x in list(path_obj.rglob(fr"copy_record/{self.raw_data_type}/*.tab.gz"))
             ]
         else:
             raise OSError(f"No nanopore {self.library}/{self.raw_data_type} for {self.sample}|{self.ssc_name}")
 
         df = pd.concat(
-            [pd.read_table(x, usecols=["RUN_ID", "DEST_PATH", "SIZE", "MD5"]) for x in copy_record_list]
+            [pd.read_table(x, usecols=["RUN_ID", "DEST_PATH", "SIZE", "MD5"], dtype='object') for x in copy_record_list]
         ).reset_index(drop=True)
 
         # Only take files with raw_data_type extension.
         df = df[df.DEST_PATH.str.contains(f".{self.raw_data_type}")]
 
         if df.empty:
-            LOG.warning(f"No files found with this suffix: .{self.raw_data_type} in {copy_record_list}. Trying ")
-            sys.exit(1)
-        [os.path.join(x.parent, x.name) for x in path_obj.glob(fr"*/*/{}/*.{}")]
+            LOG.warning(f"No files found with this suffix: .{self.raw_data_type} in {copy_record_list}. Revert to generating MD5 sums for {self.raw_data_type}")
+            md5_these_filepaths = path_obj.glob(fr"*/*/*/*.{self.raw_data_type}")
+            for idx, fp in enumerate(md5_these_filepaths):
+                runid = fp.absolute().parts[13]
+                parent_path_len = len(path_obj.parts) - 4
+                dest_path = os.path.join(*fp.parts[parent_path_len:])
+                size = os.path.getsize(fp)
+                md5sum_dict = MD5Generator(search_dict={self.raw_data_type: os.path.join(fp.parent, fp.name)}).fetch_md5sum()
+                md5sum = md5sum_dict[self.raw_data_type][0][0]
+
+                # Populate the DF
+                df.loc[idx, ["RUN_ID", "DEST_PATH", "SIZE", "MD5"]] = runid, dest_path, size, md5sum
 
         for entry in df.itertuples():
             path_split = entry.DEST_PATH.split(os.sep)
@@ -457,17 +471,16 @@ class ONTTree:
             if "bam" in src_fn:
                 target_suffix = src_fn[src_fn.index("fastq"):]
                 target_suffix = self.manipulate_filename(target_suffix)
-                bc_df.loc[entry.Index, "dest_file"] = os.path.join(".", "raw_data", self.ssc_name, "ont",
-                                                                   self.library, target_suffix.replace("fastq", "bam"))
+                bc_df.loc[entry.Index, "dest_file"] = os.path.join(".", "raw_data", self.ssc_name, "nanopore", self.library, target_suffix.replace("fastq", "bam"))
             else:
-                target_suffix = src_fn[src_fn.index("ont"):]
+                target_suffix = src_fn[src_fn.index("nanopore"):]
                 target_suffix = self.manipulate_filename(target_suffix)
                 bc_df.loc[entry.Index, "dest_file"] = os.path.join(".", "fastq_assembly", self.ssc_name, target_suffix)
 
         return bc_df
 
     def write_bc_md5s(self):
-        def get_outfile_name(df, fp, search_word):
+        def get_outfile_name(df, fp, search_word) -> str:
             run_id = os.path.basename(fp).split(".")[0]
             target_dir_list = [x for x in self.dest_dir_list if run_id in x]
 
@@ -492,6 +505,12 @@ class ONTTree:
             else:
                 LOG.debug(f"sample name is already in its ssc form {self.sample}|ssc:{self.ssc_name}")
                 # raise ValueError(f"cannot determine pattern for renaming md5 in {self.sample}: {df}")
+
+            # change the bam names
+            for idx, entry in df.iterrows():
+                if entry.file_name.endswith(".bam") or entry.file_name.endswith(".bam.bai"):
+                    df.loc[idx, "file_name"] = entry.file_name.replace("fastq", "bam")
+
             get_outfile_name(df=df, fp=file_path, search_word="raw_data")
             get_outfile_name(df=df, fp=file_path, search_word="fastq")
 
@@ -504,7 +523,7 @@ class ONTTree:
             src_fn = entry.src_file
 
             if src_fn.endswith(f".{self.raw_data_type}"):
-                target_suffix = src_fn[src_fn.index("ont"):]
+                target_suffix = src_fn[src_fn.index("nanopore"):].replace("fast5", self.raw_data_type)
                 df.loc[entry.Index, "dest_file"] = os.path.join(".", "raw_data", self.ssc_name, target_suffix)
 
         df["dest_outfile_name"] = df["dest_file"].apply(
