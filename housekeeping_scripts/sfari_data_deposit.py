@@ -206,7 +206,6 @@ class MD5Generator:
                 search_space = [self.search_dict[k]]
 
             for each_file in search_space:
-                print(each_file)
                 LOG.info(f"making md5: {each_file}")
                 fl.append(self.make_md5sum(file_name=each_file))
                 LOG.info(f"md5 fetched: {each_file}")
@@ -381,33 +380,46 @@ class ONTTree:
 
         # Check if empty
         is_empty = is_empty_dir(path_obj=path_obj)
+        df = pd.DataFrame()
         if not is_empty:
-            copy_record_list = [
-                x.as_posix() for x in list(path_obj.rglob(fr"copy_record/{self.raw_data_type}/*.tab.gz"))
-            ]
+            search_for_cr = list(path_obj.rglob(fr"copy_record/{self.raw_data_type}/*.tab.gz"))
+            if search_for_cr:
+                copy_record_list = [x.as_posix() for x in search_for_cr]
+
+                df = pd.concat(
+                    [pd.read_table(x, usecols=["RUN_ID", "DEST_PATH", "SIZE", "MD5"], dtype='object') for x in
+                     copy_record_list]
+                ).reset_index(drop=True)
+
+                for fp in copy_record_list:
+                    check_df = pd.read_table(fp, usecols=["RUN_ID", "DEST_PATH", "SIZE", "MD5"], dtype='object')
+                    for x in check_df.itertuples():
+                        search_path = os.path.join(self.prefix, x.DEST_PATH)
+                        exists = os.path.exists(search_path)
+                        if not exists:
+                            raise OSError(f"{search_path} doesn't exist, maybe not {self.raw_data_type}? or it doesnt simply does not exist.")
+            else:
+                LOG.warning(
+                    f"No copy record found for {self.raw_data_type}. Revert to generating MD5 sums for {self.raw_data_type}"
+                )
+                md5_these_filepaths = path_obj.glob(fr"*/*/*/*.{self.raw_data_type}")
+                for idx, fp in enumerate(md5_these_filepaths):
+                    runid = fp.absolute().parts[13]
+                    parent_path_len = len(path_obj.parts) - 4
+                    dest_path = os.path.join(*fp.parts[parent_path_len:])
+                    size = os.path.getsize(fp)
+                    md5sum_dict = MD5Generator(
+                        search_dict={self.raw_data_type: os.path.join(fp.parent, fp.name)}).fetch_md5sum()
+                    md5sum = md5sum_dict[self.raw_data_type][0][0]
+
+                    # Populate the DF
+                    df.loc[idx, ["RUN_ID", "DEST_PATH", "SIZE", "MD5"]] = runid, dest_path, size, md5sum
+
         else:
             raise OSError(f"No nanopore {self.library}/{self.raw_data_type} for {self.sample}|{self.ssc_name}")
 
-        df = pd.concat(
-            [pd.read_table(x, usecols=["RUN_ID", "DEST_PATH", "SIZE", "MD5"], dtype='object') for x in copy_record_list]
-        ).reset_index(drop=True)
-
         # Only take files with raw_data_type extension.
-        df = df[df.DEST_PATH.str.contains(f".{self.raw_data_type}")]
-
-        if df.empty:
-            LOG.warning(f"No files found with this suffix: .{self.raw_data_type} in {copy_record_list}. Revert to generating MD5 sums for {self.raw_data_type}")
-            md5_these_filepaths = path_obj.glob(fr"*/*/*/*.{self.raw_data_type}")
-            for idx, fp in enumerate(md5_these_filepaths):
-                runid = fp.absolute().parts[13]
-                parent_path_len = len(path_obj.parts) - 4
-                dest_path = os.path.join(*fp.parts[parent_path_len:])
-                size = os.path.getsize(fp)
-                md5sum_dict = MD5Generator(search_dict={self.raw_data_type: os.path.join(fp.parent, fp.name)}).fetch_md5sum()
-                md5sum = md5sum_dict[self.raw_data_type][0][0]
-
-                # Populate the DF
-                df.loc[idx, ["RUN_ID", "DEST_PATH", "SIZE", "MD5"]] = runid, dest_path, size, md5sum
+        df = df[df.DEST_PATH.str.contains(f".{self.raw_data_type}$")]
 
         for entry in df.itertuples():
             path_split = entry.DEST_PATH.split(os.sep)
@@ -459,10 +471,11 @@ class ONTTree:
 
         bc_df.reset_index(inplace=True, drop=True)
 
-        md5_files = bc_df[bc_df.src_file.str.contains("\.md5")].src_file.tolist()
+        md5_files = bc_df[bc_df.src_file.str.contains(".md5$")].src_file.tolist()
         self.basecall_md5_files = md5_files
 
-        bc_df = bc_df[~bc_df.src_file.str.contains(".md5|tar.gz|.txt|.tsv.gz", regex=True)]
+        # bc_df = bc_df[~bc_df.src_file.str.contains(".md5\b|tar.gz\b|.txt\b|.tsv.gz\b|.html\b", regex=True)]
+        bc_df = bc_df[bc_df.src_file.str.contains("\.fast5$|\.bam|\.fastq", regex=True)]
 
         for entry in bc_df.itertuples():
 
