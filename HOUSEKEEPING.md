@@ -27,6 +27,19 @@ mkdir submission_batch_1 && cd $_
 module load miniconda/4.12.0
 ./sfari_data_deposit --proj_dir /net/eichler/vol28/projects/long_read_archive/nobackups/clinical --sample 14694_s1:SSC12738 --ont_dtype pod5
 ```
+:star: If the above script is producing md5sums for pod5 files, then when it's done, please make a copy record of the pod5 in the long read archive using the below command:
+```shell
+cd $LRA/clinical
+/path/of/copy-record-pod5.py absolute/path/of/generated/pod5.md5 relative/path/to/fast5/copy_record/equivalent output/pathname/pod5/copy_record/something.tab.gz
+```
+:star: when you have all the samples in a SFARI style file hierarchy, then make the metadata file following the below example for naming convention. use this script to make the metadata file.
+```shell
+cd /path/to/your/sfari-data-deposit-working-directory
+# if you have multiple samples, wrap this in a loop.
+# find the ssc_name:sex:family:member values in /net/eichler/vol28/projects/autism_genome_assembly/nobackups/sample_info.tab
+/path/to/sfari-make-metadata.sh ssc_name:sex:family:member $LRA/clinical
+```
+
 ### File hierarchy
 ```text
 ./fastq_assembly/SSC10694
