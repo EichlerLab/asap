@@ -80,10 +80,11 @@ This step produces a fasta file.
 ## Alignment
 This step is produces a BAM. And can be achieved via: https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:wharvey:align_all for all.
 * PacBio_HiFi fastq.gz input, the pipeline uses [pbmm2](https://github.com/PacificBiosciences/pbmm2)
-* Illumina fastq.gz, the pipeline uses bwa2 and you can find fofn here:
     ```shell
-    ls -lrtha /net/eichler/vol28/projects/autism_genome_assembly/nobackups/data/Illumina/WGS/fastq/fofn
+    # make sure you populate the manifest.tab before running
+    cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/align/GRCh38/ && ./run_pbmm2.sh
     ```
+* Illumina fastq.gz, the pipeline uses bwa2 and you can find fofn here `ls -lrtha /net/eichler/vol28/projects/autism_genome_assembly/nobackups/data/Illumina/WGS/fastq/fofn`
 
 [:arrow_double_up:](#table-of-contents)
 
