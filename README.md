@@ -11,6 +11,8 @@ This repo logs tasks involved for this project- either executed sequentially or 
   * [verifybamid](#verifybamid)
   * [sex-verify](#sex-verify)
 * [Genome Assembly](#genome-assembly)
+  * hifiasm
+  * fix sex chromosome of autism family fathers
 * [Alignment](#alignment)
 * [Variant calling](#variant-calling)
 * [Getting a refined call set](#refined-callset)
@@ -75,6 +77,8 @@ This step produces a fasta file.
   cd /net/eichler/vol28/projects/autism_genome_assembly/nobackups/assemblies/hifiasm_0.16.1 && ./run_hifiasm.sh 30 -p
   ```
 * Version used for all our samples ATM (Jan 16, 2024): hifiasm 0.16.1 with just HiFi data.
+* fix-sex-chromosome: use this pipeline to fix partially phased autism family fathers.
+https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:sex_chromosome_grouping
 
 [:arrow_double_up:](#table-of-contents)
 ## Alignment

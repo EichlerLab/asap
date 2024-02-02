@@ -34,10 +34,11 @@ cd $LRA/clinical
 ```
 :star: when you have all the samples in a SFARI style file hierarchy, then make the metadata file following the below example for naming convention. use this script to make the metadata file.
 ```shell
-cd /path/to/your/sfari-data-deposit-working-directory
+cd /path/to/your/test-youngjun
 # if you have multiple samples, wrap this in a loop.
-# find the ssc_name:sex:family:member values in /net/eichler/vol28/projects/autism_genome_assembly/nobackups/sample_info.tab
-/path/to/sfari-make-metadata.sh ssc_name:sex:family:member $LRA/clinical
+# find the alt_id:sex:family_id:family_role values in /net/eichler/vol28/projects/autism_genome_assembly/nobackups/sample_info.tab
+# e.g. SSC00031:M:11071:fa
+/path/to/sfari-make-metadata.sh alt_id:sex:family_id:family_role $LRA/clinical >> test-file.tsv
 ```
 
 ### File hierarchy
