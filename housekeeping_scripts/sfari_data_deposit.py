@@ -16,6 +16,7 @@ import concurrent.futures
 import pathlib
 import logging
 import hashlib
+import re
 
 import pandas as pd
 pd.set_option('display.max_colwidth', None)
@@ -61,9 +62,22 @@ def main():
         ont_df = ont_obj.desired_tree_df()
 
         distribute_hard_link_jobs(src_list=ont_df["src_file"], dest_list=ont_df["dest_file"], threads=threads)
-        ont_obj.write_out_raw_data_md5()
 
-        ont_obj.write_bc_md5s()
+        ont_bc_df = ont_df[~ont_df["src_file"].str.endswith(("fast5","pod5"))].copy()
+        ont_bc_df["dest_dir"] = ont_bc_df["dest_file"].apply(os.path.dirname)
+        ont_search_dict = ont_obj.find_ont_md5(df=ont_bc_df)
+        
+        MD5Generator(search_dict=ont_search_dict, num_workers=threads).write_md5sums()
+
+        ont_bc_dest_md5_df = get_reads_dest_md5_df(reads_df=ont_bc_df, search_dict=ont_search_dict)
+        for md5_index in range(len(ont_bc_dest_md5_df)):
+            if not os.path.exists(ont_bc_dest_md5_df.dest_file[md5_index]):
+                file_df = pd.read_table(ont_bc_dest_md5_df.src_file[md5_index], names=["md5", "file_name"]).sort_values(by="file_name")
+                file_df["file_name"] = file_df.file_name.str.replace(sample_name, ssc_name)
+                file_df.to_csv(ont_bc_dest_md5_df.dest_file[md5_index], sep="\t", index=False, header=False)
+                LOG.info(f"wrote: {ont_bc_dest_md5_df.dest_file[md5_index]}")
+        
+        ont_obj.write_out_raw_data_md5()
         
 
     # ------------------------ Process HiFi/CCS/Revio ------------------------------- #
@@ -79,7 +93,7 @@ def main():
                 
         MD5Generator(search_dict=hifi_search_dict, num_workers=threads).write_md5sums()
 
-        hifi_dest_md5_df = get_hifi_dest_md5_df(hifi_df=hifi_df, search_dict=hifi_search_dict)
+        hifi_dest_md5_df = get_reads_dest_md5_df(reads_df=hifi_df, search_dict=hifi_search_dict)
         for md5_index in range(len(hifi_dest_md5_df)):
             if not os.path.exists(hifi_dest_md5_df.dest_file[md5_index]):
                 file_df = pd.read_table(hifi_dest_md5_df.src_file[md5_index], names=["md5", "file_name"]).sort_values(by="file_name")
@@ -178,11 +192,11 @@ def make_dir_and_hard_link(src_file, dest_file):
     return 1
 
 
-def get_hifi_dest_md5_df(hifi_df, search_dict):
+def get_reads_dest_md5_df(reads_df, search_dict):
     dest_md5_df = pd.DataFrame(columns=["src_file", "dest_file"])
 
     dest_md5_files=[]
-    for row in hifi_df.itertuples():
+    for row in reads_df.itertuples():
         if "fastq.gz" in row.dest_file:
             dest_md5_files.append(
                 os.path.join(row.dest_dir, "fastq.md5")
@@ -192,7 +206,7 @@ def get_hifi_dest_md5_df(hifi_df, search_dict):
                 os.path.join(row.dest_dir, "bam.md5")
             )
         else:
-            raise ValueError(f"hifi md5 not accnted for: {row.src_file}")
+            raise ValueError(f"Reads md5 not accnted for: {row.src_file}")
     dest_md5_files = set(dest_md5_files)
 
     for idx, x in enumerate(search_dict.keys()):
@@ -231,6 +245,18 @@ def get_asm_dest_md5_df(asm_df, search_dict):
 
     return dest_md5_df
 
+
+def get_md5sum(file_name):
+    md5 = hashlib.md5()
+    with open(file_name, 'rb') as f:
+        while True:
+            chunk = f.read(4096)  # Read and hash the file in 4KB chunks
+            if not chunk:
+                break
+            md5.update(chunk)
+    return md5.hexdigest()
+
+
 class MD5Generator:
     def __init__(self, search_dict, num_workers=1):
         self.search_dict = search_dict
@@ -256,13 +282,19 @@ class MD5Generator:
                     continue
                 target_list = search_dict[fofn]
                 base_names = [ file_path.split("/")[-1] for file_path in target_list ]
-                fofn_df = pd.read_csv(fofn,sep="\t",header=0,names=["md5","fname"])
+                fofn_df = pd.read_csv(fofn, sep="\t",header=None, names=["md5","fname"])
                 fofn_df["fname"] = fofn_df["fname"].str.replace("^./","", regex=True)
+                fofn_df["base_name"] = fofn_df["fname"].apply(os.path.basename)
+                fofn_df["base_name"] = fofn_df["base_name"].str.replace("^./","", regex=True)
+
                 for fname in fofn_df["fname"]:
                     if not fname in base_names:
                         rerun_flag += 1
+                fofn_df_base_names = fofn_df["base_name"].tolist()
+                for base_name in base_names:
+                    if not base_name in fofn_df_base_names:
+                        rerun_flag += 1
             return rerun_flag
-
 
 
         md5sums_dict = {}
@@ -376,9 +408,6 @@ class HiFiTree:
         else:
             raise ValueError(f"Unsupported which_one param: {which_one}")
 
-        # if not file_is_paired(bams):
-        #     raise OSError(f"HiFi {which_one} for {path_obj} may not all have corresponding indicies: len={len(bams)}.")
-
         return bams
 
     @staticmethod
@@ -387,9 +416,6 @@ class HiFiTree:
                        x.name.endswith('.fastq.gz') or x.name.endswith('.fastq.gz.gzi') or x.name.endswith('.fastq.gz.fai') and (not "fail" in x.name)]
 
         fastq_gz = [x.as_posix() for x in first_layer if x.name.startswith('m')]
-
-        # if not file_is_paired(fastq_gz):
-        #     raise OSError(f"HiFi fastq.gz for {path_obj} may not all have corresponding indicies: len={len(fastq_gz)}.")
 
         return fastq_gz
 
@@ -570,7 +596,29 @@ class ONTTree:
 
         path_obj = path_obj.parent / new_base_name
         return path_obj.as_posix()
+    
+    @staticmethod
+    def find_ont_md5(df):
+        md5_dict = df.groupby(["src_dir"])["src_file"].apply(list).to_dict()
+        new_md5_dict = {}
 
+        for basecall_dir, basecalled_files in md5_dict.items():
+            fastq_files = []
+            bam_files = []
+            for bc_file in basecalled_files:
+                if re.search("fastq.gz", bc_file):
+                    fastq_files.append(bc_file)
+                elif re.search(".bam", bc_file):
+                    bam_files.append(bc_file)
+
+            fastq_key = os.path.join(basecall_dir, "fastq.md5")
+            bam_key = os.path.join(basecall_dir, "bam.md5")
+            new_md5_dict[fastq_key] = fastq_files
+            new_md5_dict[bam_key] = bam_files
+
+        del md5_dict
+        return new_md5_dict
+    
     def get_basecalled_data(self, df):
         check_these_dirs = df["BASECALLED_DATA_PREFIX"].unique().tolist()
 
@@ -585,8 +633,10 @@ class ONTTree:
                 bc_df = pd.concat([bc_df, pd.DataFrame(data={"src_file": file_list})])
 
         bc_df.reset_index(inplace=True, drop=True)
+        
 
         md5_files = bc_df[bc_df.src_file.str.contains(".md5$")].src_file.tolist()
+
         self.basecall_md5_files = md5_files
 
         # bc_df = bc_df[~bc_df.src_file.str.contains(".md5\b|tar.gz\b|.txt\b|.tsv.gz\b|.html\b", regex=True)]
@@ -600,12 +650,13 @@ class ONTTree:
             passed_basecalled_data_list.append(fastq+".gzi")
         for bam in selected_bam_list:
             passed_basecalled_data_list.append(bam)
-            passed_basecalled_data_list.append(bam+".bai")
-        
+            passed_basecalled_data_list.append(bam+".bai")        
 
         bc_df = bc_df[
             bc_df.src_file.isin(passed_basecalled_data_list)
             ]
+        
+        bc_df["src_dir"] = bc_df["src_file"].apply(os.path.dirname)
 
 
         for entry in bc_df.itertuples():
@@ -623,44 +674,6 @@ class ONTTree:
 
         return bc_df
 
-    def write_bc_md5s(self):
-        def get_outfile_name(df, fp, search_word) -> str:
-            run_id = os.path.basename(fp).split(".")[0]
-            target_dir_list = [x for x in self.dest_dir_list if run_id in x]
-            
-            if search_word == "raw_data":
-                target_name = "bam"
-            else:
-                target_name = "fastq"
-            try:
-                outfile_name = os.path.join([x for x in target_dir_list if search_word in x].pop(), f"{target_name}.md5")
-                if not os.path.exists(outfile_name):
-                    if target_name == "fastq":
-                        target_name = "fastq.gz"
-#                    print (df[df.file_name.str.contains(target_name)])
-                    df[df.file_name.str.contains(target_name)].to_csv(outfile_name, sep="\t", header=False, index=False)
-                    LOG.info(f"wrote: {outfile_name}")
-                else:
-                    LOG.debug(f"{outfile_name} exists, ignoring.")
-            except:
-                LOG.debug(f"{run_id} was not selected, ignoring.")
-
-
-        for file_path in self.basecall_md5_files:
-            df = pd.read_csv(file_path, names=["md5", "file_name"], sep="\s+")
-            if not df.file_name.str.contains(self.ssc_name).any():
-                df.file_name.replace({self.sample: self.ssc_name}, regex=True, inplace=True)
-            else:
-                LOG.debug(f"sample name is already in its ssc form {self.sample}|ssc:{self.ssc_name}")
-                # raise ValueError(f"cannot determine pattern for renaming md5 in {self.sample}: {df}")
-
-            # change the bam names
-            for idx, entry in df.iterrows():
-                if entry.file_name.endswith(".bam") or entry.file_name.endswith(".bam.bai"):
-                    df.loc[idx, "file_name"] = entry.file_name.replace("fastq", "bam")
-            get_outfile_name(df=df, fp=file_path, search_word="raw_data")
-            get_outfile_name(df=df, fp=file_path, search_word="fastq")
-
     def desired_tree_df(self):
 
         def define_out_dir(dest_file):
@@ -672,7 +685,6 @@ class ONTTree:
 
         df = self.data_df
         bc_df = self.get_basecalled_data(df=df)
-
         self.dest_dir_list = bc_df["dest_file"].apply(os.path.dirname).unique().tolist()
 
         for entry in df.itertuples():
