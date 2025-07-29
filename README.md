@@ -19,6 +19,7 @@ This repo logs tasks involved for this project- either executed sequentially or 
 * [Annotation](#Annotattion)
 * [Methylation](#methylation)
 * [Housekeeping](HOUSEKEEPING.md)
+* [Citation](#citation)
 
 ## Inputs
 ### Sample origin/cohort
@@ -100,24 +101,24 @@ This step is produces a BAM. And can be achieved via: [Internal path](https://ei
 ## SV merging
 The steps here are using [Truvari](https://github.com/ACEnglish/truvari) by sequential order.
 
-#### 1. sampleset merge.
+#### 1. Sampleset merge.
 
 ```shell
 bcftools merge --thread {threads} --merge none --force-samples -O z -o {output.vcf.gz} {input.vcf1.gz} {input.vcf2.gz} {input.vcf3.gz}
 truvari collapse -i {input.vcf.gz} -c {output.removed.vcf.gz} --sizemin 0 --sizemax 1000000 -k maxqual --gt het --intra --pctseq 0.90 --pctsize 0.90 --refdist 500 | bcftools sort --max-mem 8G -O z -o {output.collapsed.vcf.gz}
 ```
 
-#### 2. inter-sample nmerge.
+#### 2. Inter-sample merge.
 ```shell
 bcftools merge --threads {threads} --merge none --force-samples --file-list {input.vcflist} -O z | bcftools norm --threads 15 --do-not-normalize --multiallelics -any --output-type z -o {output.mergevcf.gz}
 truvari collapse --input {input.mergevcf.gz} --collapsed-output {output.removed_vcf.gz} --sizemin 0 --sizemax 1000000 --pctseq 0.90 --pctsize 0.90 --keep common --gt all | bcftools sort --max-mem {resources}G --output-type z > {output.collapsed_vcf.gz}
 ```
 
-#### 3. [Rare SV pool discovery](pipeline_scripts/rareSVpool).
+#### 3. [Rare SV pool discovery](pipeline_scripts/rareSVpool) of [an example input](https://eichlerlab.gs.washington.edu/public/rareSVpool/example_files).
 ```shell
 python rareSVpool.py {input.collapsed_sv}
 ```
-#### 4. de novo validation
+#### 4. De novo validation
 * Initial caller support using [Truvari](https://github.com/ACEnglish/truvari)
 * Callable region evaluation using [BoostSV](https://github.com/jiadong324/BoostSV)
 * Genotyping support using [kanpig](https://github.com/ACEnglish/kanpig)
@@ -132,8 +133,8 @@ python rareSVpool.py {input.collapsed_sv}
 ## Annotation (GRCh38)
 * Gene and location annotation using [AnnotSV](https://github.com/lgmgeo/AnnotSV), and then simplified by using [sim_annotSV.py](pipeline_scripts/comREG/sim_annotSV.py)
 * CADD score using [CADD-SV](https://github.com/kircherlab/CADD-SV)
-* Regulatory annotation using [comREG](pipeline_scripts/comREG/regulation.snakefile)
-* Combine all annotations using [comREG](pipeline_scripts/comREG/combine_anno.py)
+* Regulatory annotation using [REG data](https://eichlerlab.gs.washington.edu/public/comREG/data/) and [comREG](pipeline_scripts/comREG/regulation.snakefile)
+* Combine all annotations from [comREG](pipeline_scripts/comREG/)
 
 [:arrow_double_up:](#table-of-contents)
 
@@ -143,4 +144,9 @@ This step produces a methylation bed file and bigwig files of the beds. [Interna
 
 [:arrow_double_up:](#table-of-contents)
 
+
+## Citation
+For citation, please refer to our paper at: https://www.medrxiv.org/content/10.1101/2025.07.21.25331932v1
+
+[:arrow_double_up:](#table-of-contents)
 

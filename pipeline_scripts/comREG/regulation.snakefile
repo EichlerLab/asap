@@ -1,7 +1,7 @@
 #refer to: https://github.com/EichlerLab/svpop/blob/main/rules/variant/anno/regions.snakefile from SVpop.
 import pandas as pd
 
-sv_file = 'annotation_reg_input.bed'
+sv_file = 'example_files/annotation_reg_input.bed'
 
 manifest_df = pd.read_csv('manifest.txt', sep='\t', header=0, index_col="peak")
 wildcard_constraints:
@@ -13,7 +13,7 @@ def get_peak(wildcards):
 
 rule all:
     input:
-        expand(['allreg_sv.txt'], peak=manifest_df.index)
+        expand(['example_files/allreg_sv.txt'], peak=manifest_df.index)
 
 #
 # variant_anno_intersect
@@ -40,9 +40,9 @@ rule variant_anno_intersect:
 rule variant_anno_max_constraint:
     input:
         bed=sv_file,
-        nc_constraint='data/Non-coding_constraint/Supplementary_Data_2.bed'
+        Gnocchi='data/Non-coding_constraint_Supplementary_Data_2.bed'
     output:
-        nc_constraint_tsv='temp/nc_constraint_sv.txt'
+        Gnocchi_tsv='temp/Gnocchi_sv.txt'
     resources:
         mem=10,
         hrs=24,
@@ -52,13 +52,13 @@ rule variant_anno_max_constraint:
     #benchmark: "benchmark/oreganno.log"
     shell:
         """
-        bedtools intersect -a {input.bed} -b {input.nc_constraint} -wo|sort -k4,4 -k8,8r|awk '!seen[$4]++' |cut -f4,8 > {output.nc_constraint_tsv}
+        bedtools intersect -a {input.bed} -b {input.Gnocchi} -wo|sort -k4,4 -k8,8r|awk '!seen[$4]++' |cut -f4,8 > {output.Gnocchi_tsv}
         """
 
 rule variant_anno_max_segdup:
     input:
         bed=sv_file,
-        segdup='data/UCSC_repeat/SegDup.bed'
+        segdup='data/UCSC_repeat_SegDup.bed'
     output:
         segdup_tsv='temp/segdup_sv.txt'
     resources:
@@ -77,7 +77,7 @@ rule variant_anno_max_segdup:
 rule variant_anno_max_DHS_MEAN:
     input:
         bed=sv_file,
-        dhs='data/dhs2020/dhs_200.bed'
+        dhs='data/dhs2020_dhs_200.bed'
     output:
         dhs_tsv='temp/dhs_sv.txt'
     resources:
@@ -123,7 +123,7 @@ rule variant_anno_reg_all_reg:
         sno_miRNA='temp/sno_miRNA_sv.txt',
         dhs=rules.variant_anno_max_DHS_MEAN.output.dhs_tsv,
         segdup=rules.variant_anno_max_segdup.output.segdup_tsv,
-        nc_constraint=rules.variant_anno_max_constraint.output.nc_constraint_tsv,
+        Gnocchi=rules.variant_anno_max_constraint.output.Gnocchi_tsv,
     output:
         tsv='allreg_sv.txt',
     resources:
@@ -161,7 +161,7 @@ rule variant_anno_reg_all_reg:
             'sno_miRNA':input.sno_miRNA,
             'DHS':input.dhs,
             'SegDup':input.segdup,
-            'ncConstraint':input.nc_constraint
+            'Gnocchi':input.Gnocchi
             }
 
         for column, file_path in annotation_files.items():

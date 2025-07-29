@@ -5,7 +5,6 @@
 '''
 @author: Yang Sui
 @contact: yangsui@uw.edu
-@time: 02/12/25
 @ Prerequisite: 
 module load annotsv/3.4
 AnnotSV -SvinputFile annotSV.input.bed -svtBEDcol 4 -candidateGenesFile /net/eichler/vol28/projects/autism_genome_assembly/nobackups/yangsui/annotSV/NDDgene.txt -promoterSize 500 -REreport 1 -outputFile truvariSVsanno
@@ -14,7 +13,7 @@ import pandas as pd
 import numpy as np
 
 # read file by parsing lines.
-finp = open('truvariSVsanno.tsv')
+finp = open('example_files/truvariSVsanno.tsv')
 header = finp.readline().strip().split('\t')
 data = [ line.replace('\n','').split('\t') for line in finp ]
 df = pd.DataFrame(data)
@@ -65,7 +64,7 @@ final_anno = merge[['user#1', 'LocationSV_sim', 'geneMatch', 'Gene_count','Gene_
 
 final_anno = final_anno.rename({'user#1': 'ID'}, axis=1)
 
-final_anno.to_csv('truvariSVsanno_sim.txt', sep='\t', index=False)
+final_anno.to_csv('example_files/truvariSVsanno_sim.txt', sep='\t', index=False)
 
 
 
