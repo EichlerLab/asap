@@ -1,7 +1,9 @@
 # ASAP
-Autism Susceptibility Analysis Pipeline with focus in Structural Variants.
+Autism Susceptibility Analysis Pipeline with focus in Structural Variants. This repo logs tasks involved for this project- either executed sequentially or asynchronously. 
 
-This repo logs tasks involved for this project- either executed sequentially or asynchronously.  
+##### System Requirements 
+Hardware requirements: Any Processor capable of running x86_64 architecture and at least 128GB of memory. Some steps can process samples in parallel, while the steps that handle all samples together scale logarithmically with sample size.
+Software requirements: The developed code mainly depends on the Python3 scientific stack and has been tested on the following system: Ubuntu 22.04.
 
 ##### Table of Contents
 * [Inputs](#inputs)
