@@ -1,12 +1,12 @@
 # ASAP
-Autism Susceptibility Analysis Pipeline with focus in Structural Variants. This repo logs tasks involved for this project- either executed sequentially or asynchronously. 
+Autism Susceptibility Analysis Pipeline with a focus on Structural Variants (SVs). This repository documents the tasks involved in this project, which may be executed either sequentially or asynchronously. The approach used for rare variant or pathogenic candidate discovery in this study can be applied broadly to families affected by any rare disease.
 
 ##### System Requirements 
 Hardware requirements: Any Processor capable of running x86_64 architecture and at least 128GB of memory. Some steps can process samples in parallel, while the steps that handle all samples together scale logarithmically with sample size.
 Software requirements: The developed code mainly depends on the Python3 scientific stack and has been tested on the following system: Ubuntu 22.04.
 
 ##### Table of Contents
-* [Inputs](#inputs)
+* [Sample](#inputs)
 * [QC](#qc)
   * [back-reference-qc](#back-reference-qc)
   * [ntsm](#ntsm)
@@ -23,9 +23,9 @@ Software requirements: The developed code mainly depends on the Python3 scientif
 * [Housekeeping](HOUSEKEEPING.md)
 * [Citation](#citation)
 
-## Inputs
+## Sample
 ### Sample origin/cohort
-This pertains to SSC + SAGE + Rett-like cohort (189 individuals from 51 families).
+This study comprised 189 individuals (51 families) from the SSC, SAGE, and Rett-like cohorts, and the methodology is applicable to families with any rare disease.
 
 | Count | Sex (proband-sibling) | Family type |
 |:-----:|:---------------------:|------------:|
@@ -36,74 +36,71 @@ This pertains to SSC + SAGE + Rett-like cohort (189 individuals from 51 families
 |  13   |           F           |        trio |
 |   2   |           M           |        trio |
 
-Sample sheet is here: `/net/eichler/vol28/projects/autism_genome_assembly/nobackups/sample_info.tab`
-
-`Dataset S1`
+The sample manifest is available in the supplementary data of the publication.
 
 [:arrow_double_up:](#table-of-contents)
 ## QC
 ##### back-reference-qc ([Kraken2](https://github.com/DerrickWood/kraken2))
-* use this pipeline for non-human contamination of reads.
-  * minimal requirement: fastq.gz
-  * [Internal path](https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:back_reference_qc)
+* Use this pipeline to check for non-human contamination in reads.
+  * Minimal requirement: FASTQ
 
 ##### [ntsm](https://github.com/JustinChu/ntsm)
-* use this tool/pipeline to assess inter-sample contamination.
-    * minimal requirement: fastq.gz
+* Use this tool/pipeline to assess inter-sample contamination.
+    * Minimal requirement: FASTQ
 
 ##### [VerifyBamID](https://github.com/Griffan/VerifyBamID)
-* use this tool/pipeline to assess contamination of non-humanness as well as inter-sample contamination.
-    * minimal requirement: bam
-    * [Internal path](https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:nidhi12k:vbi)
+* Use this tool/pipeline to assess both non-human contamination and inter-sample contamination.
+    * Minimal requirement: BAM
 
 ##### [Somalier](https://github.com/brentp/somalier)
-* use this tool/pipeline to assess inter-sample contamination as well as ancestry and relatedness.
-    * minimal requirement: bam
+* Use this tool/pipeline to assess inter-sample contamination, as well as ancestry and relatedness.
+    * Minimal requirement: BAM
 
 ##### [Merqury](https://github.com/marbl/merqury)
-* use this tool/pipeline to assess quality of genome assembly
-    * minimal requirement: fastq.gz and its own Illumina
-    * [Internal path](https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:merqury)
+* Use this tool/pipeline to assess genome assembly quality.
+    * Minimal requirement: FASTQ and its own Illumina
 
 ##### [sex-verify](pipeline_scripts/sex-veriy)
-* use this to check either per cell or sample for sex verification
-    * minimal requirement: bam
+* Use this to verify sex per cell or sample.
+    * Minimal requirement: BAM
     * [click here for notes](notes/sex-verify.md)
 
 [:arrow_double_up:](#table-of-contents)
 ## Genome assembly
-This step produces a fasta file.
-* [hifiasm](https://github.com/chhylp123/hifiasm): use this pipeline/tool to assemble sample genome (trio-phased requires parental Illumina data as input).
+This step produces FASTA files.
+##### [hifiasm](https://github.com/chhylp123/hifiasm)
+* Use this pipeline/tool to assemble sample genomes. Trio-phased assembly requires parental Illumina data as input.
 
-* Version used for all our samples: hifiasm 0.16.1 with just HiFi data.
+* Version used for all our samples: hifiasm 0.16.1 with HiFi data only.
 
-* [fix-sex-chromosome](pipeline_scripts/fix-sex-chr): use this pipeline to fix partially phased autism family fathers.
-  * [Internal path](https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:sex_chromosome_grouping)
+##### [fix-sex-chromosome](pipeline_scripts/fix-sex-chr)
+* Use this pipeline to correct partially phased sex chromosomes in autism family fathers.
 
-* [Contiguous chromosome X/Y](https://github.com/projectoriented/contiguous-X)
-  * [Internal path](https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:contiguous-x)
-
+##### [Contiguous chromosome X/Y](https://github.com/projectoriented/contiguous-X)
+* Use this pipeline to build contiguous sex chromosomes.
 
 [:arrow_double_up:](#table-of-contents)
 ## Genome alignment
-This step is produces a BAM. And can be achieved via: [Internal path](https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:wharvey:align_all) 
-* PacBio_HiFi fastq.gz input, the pipeline uses [pbmm2](https://github.com/PacificBiosciences/pbmm2)
-
+This step produces aligned BAM files. 
+##### [pbmm2](https://github.com/PacificBiosciences/pbmm2)
+* Use this pipeline to align HiFi FASTQ files to the reference genome. 
 
 [:arrow_double_up:](#table-of-contents)
-
 ## Variant calling
-* [PAV](https://github.com/EichlerLab/pav): use hifiasm assembly output for this.([instructions](notes/pav.md))
-* [pbsv](https://github.com/PacificBiosciences/pbsv): use pbmm2 output as input for this.
-* [Sniffles](https://github.com/fritzsedlazeck/Sniffles): use pbmm2 output as input for this.
+##### [PAV](https://github.com/EichlerLab/pav)
+* Use this tool to call SVs with assemblies. ([instructions](notes/pav.md))
 
+##### [PBSV](https://github.com/PacificBiosciences/pbsv)
+* Use this tool to call SVs with alignment (pbmm2 output).
+
+##### [Sniffles](https://github.com/fritzsedlazeck/Sniffles)
+* Use this tool to call SVs with alignment (pbmm2 output).
 
 [:arrow_double_up:](#table-of-contents)
-
 ## SV merging
-The steps here are using [Truvari](https://github.com/ACEnglish/truvari) by sequential order.
+These steps are performed using [Truvari](https://github.com/ACEnglish/truvari) in sequential order.
 
-#### 1. Sampleset merge.
+#### 1. Intra-sample merge.
 
 ```shell
 bcftools merge --thread {threads} --merge none --force-samples -O z -o {output.vcf.gz} {input.vcf1.gz} {input.vcf2.gz} {input.vcf3.gz}
@@ -130,8 +127,6 @@ python rareSVpool.py {input.collapsed_sv}
 * Manual inspection using IGV
 
 [:arrow_double_up:](#table-of-contents)
-
-
 ## Annotation (GRCh38)
 * Gene and location annotation using [AnnotSV](https://github.com/lgmgeo/AnnotSV), and then simplified by using [sim_annotSV.py](pipeline_scripts/comREG/sim_annotSV.py)
 * CADD score using [CADD-SV](https://github.com/kircherlab/CADD-SV)
@@ -139,14 +134,10 @@ python rareSVpool.py {input.collapsed_sv}
 * Combine all annotations from [comREG](pipeline_scripts/comREG/)
 
 [:arrow_double_up:](#table-of-contents)
-
 ## [Methylation](https://github.com/projectoriented/continuous-methylation)
-This step produces a methylation bed file and bigwig files of the beds. [Internal path](https://eichlerlab.gs.washington.edu/help/wiki/doku.php?id=users:lettucerap:methylation)
-
+This step produces methylation bed files and corresponding bigwig files.
 
 [:arrow_double_up:](#table-of-contents)
-
-
 ## Citation
 For citation, please refer to our paper at: https://www.medrxiv.org/content/10.1101/2025.07.21.25331932v1
 
