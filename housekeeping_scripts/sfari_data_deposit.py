@@ -529,29 +529,55 @@ class HiFiTree:
         self.fastq_fofn = fastq_fofn
 
     @staticmethod
-    def get_bams(path_obj, which_one) -> list:
-        first_layer = [
-            x for x in path_obj.iterdir()
-            if (x.name.endswith(".bam") or x.name.endswith(".bam.pbi"))
-            and ("fail" not in x.name)
-        ]
+    def _iter_hifi_search_dirs(path_obj):
+        search_dirs = [path_obj]
+
+        for subdir_name in ["FiberSeq", "Kinnex"]:
+            subdir = path_obj / subdir_name
+            if subdir.is_dir():
+                search_dirs.append(subdir)
+
+        return search_dirs
+
+    @classmethod
+    def get_bams(cls, path_obj, which_one) -> list:
+        bam_files = []
+
+        for search_dir in cls._iter_hifi_search_dirs(path_obj):
+            bam_files.extend(
+                [
+                    x
+                    for x in search_dir.iterdir()
+                    if x.is_file()
+                    and (x.name.endswith(".bam") or x.name.endswith(".bam.pbi"))
+                    and ("fail" not in x.name)
+                ]
+            )
 
         if which_one == "hifi":
-            return [x.as_posix() for x in first_layer if x.name.startswith("m")]
+            return [x.as_posix() for x in bam_files if x.name.startswith("m")]
         raise ValueError(f"Unsupported which_one param: {which_one}")
 
-    @staticmethod
-    def get_fastq_gz(path_obj) -> list:
-        first_layer = [
-            x for x in path_obj.iterdir()
-            if (
-                x.name.endswith(".fastq.gz")
-                or x.name.endswith(".fastq.gz.gzi")
-                or x.name.endswith(".fastq.gz.fai")
+    @classmethod
+    def get_fastq_gz(cls, path_obj) -> list:
+        fastq_files = []
+
+        for search_dir in cls._iter_hifi_search_dirs(path_obj):
+            fastq_files.extend(
+                [
+                    x
+                    for x in search_dir.iterdir()
+                    if x.is_file()
+                    and (
+                        x.name.endswith(".fastq.gz")
+                        or x.name.endswith(".fastq.gz.gzi")
+                        or x.name.endswith(".fastq.gz.fai")
+                    )
+                    and ("fail" not in x.name)
+                ]
             )
-            and ("fail" not in x.name)
-        ]
-        return [x.as_posix() for x in first_layer if x.name.startswith("m")]
+
+        return [x.as_posix() for x in fastq_files if x.name.startswith("m")]
 
     def get_hifi_raw_data(self, file_type="bam") -> list:
         path_obj = pathlib.Path(self.prefix, self.sample, "raw_data/PacBio_HiFi")
@@ -625,9 +651,7 @@ class HiFiTree:
         selected_files = set(self._selected_hifi_files())
 
         df = pd.DataFrame(
-            data={
-                "src_file": [x for x in all_files if x in selected_files]
-            }
+            data={"src_file": [x for x in all_files if x in selected_files]}
         )
 
         df["src_dir"] = df["src_file"].apply(os.path.dirname)
