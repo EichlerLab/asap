@@ -1,0 +1,10 @@
+peak	path
+RepeatMasker	data/CHM13/T2T.RepeatMasker.bed
+SimpleRepeat	data/CHM13/T2T.SimpleRepeat.bed
+SD	data/CHM13/T2T.SDs.bed
+platinumTRs	data/CHM13/chm13v2.0_maskedY_rCRS.platinumTRs-v1.0.trgt.bed
+CpGI	data/CHM13/CpGIslands.bed
+gene	data/CHM13/gene.bed
+cCREs	data/CHM13/ENCODE.bed
+mDEL	data/CHM13/morbiditymap_DEL.bed
+mDUP	data/CHM13/morbiditymap_DUP.bed

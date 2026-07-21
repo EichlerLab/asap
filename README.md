@@ -1,5 +1,5 @@
 # ASAP
-Autism Susceptibility Analysis Pipeline with a focus on Structural Variants (SVs). This repository documents the tasks involved in this project, which may be executed either sequentially or asynchronously. The approach used for rare variant or pathogenic candidate discovery in this study can be applied broadly to families affected by any rare disease.
+Autism Susceptibility Analysis Pipeline with a focus on Structural Variants (SVs). This repository documents the tasks involved in this project, which may be executed either sequentially or asynchronously. The approach used for rare variant or pathogenic candidate discovery in this study can be applied broadly to families (or individuals) affected by any rare disease.
 
 ##### System Requirements 
 Hardware requirements: Any Processor capable of running x86_64 architecture and at least 128GB of memory. Some steps can process samples in parallel, while the steps that handle all samples together scale logarithmically with sample size.
@@ -25,43 +25,30 @@ Software requirements: The developed code mainly depends on the Python3 scientif
 
 ## Sample
 ### Sample origin/cohort
-This study comprised 189 individuals (51 families) from the SSC, SAGE, and Rett-like cohorts, and the methodology is applicable to families with any rare disease.
-
-| Count | Sex (proband-sibling) | Family type |
-|:-----:|:---------------------:|------------:|
-|  12   |          F-F          |        quad |
-|  16   |          F-M          |        quad |
-|   3   |          M-F          |        quad |
-|   5   |          M-M          |        quad |
-|  13   |           F           |        trio |
-|   2   |           M           |        trio |
+The batch 1 of the study comprised 189 individuals (51 families) from the SSC, SAGE, and Rett-like cohorts, and the methodology is applicable to families (or individuals) with any rare disease.
 
 The sample manifest is available in the supplementary data of the publication.
 
 [:arrow_double_up:](#table-of-contents)
 ## QC
-##### back-reference-qc ([Kraken2](https://github.com/DerrickWood/kraken2))
-* Use this pipeline to check for non-human contamination in reads.
+##### [back-reference-qc](https://github.com/EichlerLab/back-reference-qc)
+* Use this pipeline (Kraken2) to check for non-human contamination in reads.
   * Minimal requirement: FASTQ
 
-##### [ntsm](https://github.com/JustinChu/ntsm)
-* Use this tool/pipeline to assess inter-sample contamination.
+##### [sample-id-check](https://github.com/EichlerLab/sample-id-check)
+* Use this pipeline (NTSM and VerifyBamID) to assess inter-sample contamination and verify sample identity.
     * Minimal requirement: FASTQ
 
-##### [VerifyBamID](https://github.com/Griffan/VerifyBamID)
-* Use this tool/pipeline to assess both non-human contamination and inter-sample contamination.
-    * Minimal requirement: BAM
-
 ##### [Somalier](https://github.com/brentp/somalier)
-* Use this tool/pipeline to assess inter-sample contamination, as well as ancestry and relatedness.
+* Use this tool to assess inter-sample contamination, as well as ancestry and relatedness.
     * Minimal requirement: BAM
 
-##### [Merqury](https://github.com/marbl/merqury)
-* Use this tool/pipeline to assess genome assembly quality.
+##### [assembly_qc](https://github.com/EichlerLab/assembly_qc)
+* Use this pipeline to assess genome assembly quality.
     * Minimal requirement: FASTQ and its own Illumina
 
 ##### [sex-verify](pipeline_scripts/sex-veriy)
-* Use this to verify sex per cell or sample.
+* Use this tool to verify the presence of the Y chromosome in each cell or sample.
     * Minimal requirement: BAM
     * [click here for notes](notes/sex-verify.md)
 
@@ -69,12 +56,12 @@ The sample manifest is available in the supplementary data of the publication.
 ## Genome assembly
 This step produces FASTA files.
 ##### [hifiasm](https://github.com/chhylp123/hifiasm)
-* Use this pipeline/tool to assemble sample genomes. Trio-phased assembly requires parental Illumina data as input.
+* Use this tool to assemble sample genomes. Trio-phased assembly requires parental Illumina data as input.
 
-* Version used for all our samples: hifiasm 0.16.1 with HiFi data only.
+* Version used across samples: hifiasm 0.16.1 or 0.25.0 with HiFi data only (samples were analyzed in stages).
 
 ##### [fix-sex-chromosome](pipeline_scripts/fix-sex-chr)
-* Use this pipeline to correct partially phased sex chromosomes in autism family fathers.
+* Use this pipeline to correct partially phased sex chromosomes in autism family fathers, ensuring that hap1 corresponds to the Y chromosome and hap2 corresponds to the X chromosome.
 
 ##### [Contiguous chromosome X/Y](https://github.com/projectoriented/contiguous-X)
 * Use this pipeline to build contiguous sex chromosomes.
@@ -115,7 +102,7 @@ truvari collapse --input {input.mergevcf.gz} --collapsed-output {output.removed_
 
 #### 3. [Rare SV pool discovery](pipeline_scripts/rareSVpool) of [an example input](https://eichlerlab.gs.washington.edu/public/rareSVpool/example_files).
 ```shell
-python rareSVpool.py {input.collapsed_sv}
+python rareSVpoolv2.py --input {input.collapsed_sv} --sample {input.sample_manifest} --outdir {output.rare} {optional: --freq 1}
 ```
 #### 4. De novo validation
 * Initial caller support using [Truvari](https://github.com/ACEnglish/truvari)
@@ -127,11 +114,11 @@ python rareSVpool.py {input.collapsed_sv}
 * Manual inspection using IGV
 
 [:arrow_double_up:](#table-of-contents)
-## Annotation (GRCh38)
-* Gene and location annotation using [AnnotSV](https://github.com/lgmgeo/AnnotSV), and then simplified by using [sim_annotSV.py](pipeline_scripts/comREG/sim_annotSV.py)
-* CADD score using [CADD-SV](https://github.com/kircherlab/CADD-SV)
-* Regulatory annotation using [REG data](https://eichlerlab.gs.washington.edu/public/comREG/data/) and [comREG](pipeline_scripts/comREG/regulation.snakefile)
-* Combine all annotations from [comREG](pipeline_scripts/comREG/)
+## Annotation
+* Gene and location annotation (GRCh38) using [AnnotSV](https://github.com/lgmgeo/AnnotSV), and then simplified by using [sim_annotSV.py](pipeline_scripts/comREG/sim_annotSV.py) .
+* CADD score (GRCh38) using [CADD-SV](https://github.com/kircherlab/CADD-SV) .
+* Combined Regulatory Annotation (GRCh38/CHM13) using [REG data](https://eichlerlab.gs.washington.edu/public/comREG/data/) and [comREG](pipeline_scripts/comREG/) .
+
 
 [:arrow_double_up:](#table-of-contents)
 ## [Methylation](https://github.com/projectoriented/continuous-methylation)
@@ -139,7 +126,8 @@ This step produces methylation bed files and corresponding bigwig files.
 
 [:arrow_double_up:](#table-of-contents)
 ## Citation
-For citation, please refer to our paper at: https://www.medrxiv.org/content/10.1101/2025.07.21.25331932v1
-
+For citation, please refer to our paper at: https://www.nature.com/articles/s41467-026-68378-4
 [:arrow_double_up:](#table-of-contents)
 
+## Contact
+Questions, feedback, or bug reports are always welcome — reach out to Yang Sui at yangsui@uw.edu.

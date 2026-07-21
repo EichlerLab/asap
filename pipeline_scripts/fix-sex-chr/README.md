@@ -37,7 +37,7 @@ manifest: config/manifest.tab
 sample  hap1    hap2
 your_sample path/to/hap1_asm    /path/to/hap2_asm
 ```
-#### Step 3. Start the analysis!
+### Step 3. Start the analysis
 ```bash
 ./runsnake 30
 ```

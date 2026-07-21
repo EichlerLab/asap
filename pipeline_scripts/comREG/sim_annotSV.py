@@ -7,7 +7,7 @@
 @contact: yangsui@uw.edu
 @ Prerequisite: 
 module load annotsv/3.4
-AnnotSV -SvinputFile annotSV.input.bed -svtBEDcol 4 -candidateGenesFile /net/eichler/vol28/projects/autism_genome_assembly/nobackups/yangsui/annotSV/NDDgene.txt -promoterSize 500 -REreport 1 -outputFile truvariSVsanno
+AnnotSV -SvinputFile annotSV.input.bed -svtBEDcol 4 -candidateGenesFile NDDgene.txt -promoterSize 500 -REreport 1 -outputFile truvariSVsanno
 '''
 import pandas as pd
 import numpy as np
